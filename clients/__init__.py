@@ -9,4 +9,4 @@ except Exception as e:
     logger.error(f"❌ Gagal menyiapkan event loop: {e}")
 
 # Import client
-from .clients import BaseClient, Bot, UserBot, bot, navy
+from .clients import BaseClient, Bot, UserBot, bot, star
