@@ -3,7 +3,7 @@ import importlib
 
 from pyrogram.types import ReplyKeyboardRemove
 
-from clients import UserBot, bot, navy
+from clients import UserBot, bot, star
 from config import BOT_NAME, USENAME_OWNER
 from database import dB
 from helpers import Emoji
@@ -57,7 +57,7 @@ async def reset_emoji(client, message):
             f"<b>You are not user @{bot.me.username}!!</b>",
             reply_markup=ReplyKeyboardRemove(),
         )
-    for User in navy._ubot:
+    for User in star._ubot:
         if user_id == User.me.id:
             try:
                 em = Emoji(User)
@@ -77,12 +77,12 @@ async def reset_prefix(client, message):
     mepref = [".", ",", "?", "+", "!"]
     proses = await message.reply("<b>Processing...</b>")
     user_id = message.from_user.id
-    if user_id not in navy._get_my_id:
+    if user_id not in star._get_my_id:
         return await proses.edit(
             f"<b>You are not user @{bot.me.username}!!</b>",
             reply_markup=ReplyKeyboardRemove(),
         )
-    for x in navy._ubot:
+    for x in star._ubot:
         if x.me.id == user_id:
             x.set_prefix(x.me.id, mepref)
             await dB.set_pref(x.me.id, mepref)
@@ -104,10 +104,10 @@ async def restart_userbot(client, message):
             reply_markup=ReplyKeyboardRemove(),
         )
     try:
-        old_ubot = next((x for x in navy._ubot if x.me.id == user_id), None)
+        old_ubot = next((x for x in star._ubot if x.me.id == user_id), None)
         if old_ubot:
-            navy._ubot.remove(old_ubot)
-            navy._get_my_id.remove(user_id)
+            star._ubot.remove(old_ubot)
+            star._get_my_id.remove(user_id)
 
         ubot = UserBot(**get_id)
         await ubot.start()
