@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pyrogram.errors import FloodPremiumWait, FloodWait, UserBannedInChannel
 
-from clients import navy
+from clients import star
 from config import BLACKLIST_GCAST
 from database import dB
 from logs import logger
@@ -115,7 +115,7 @@ async def send_forward(client):
 async def AutoFW():
     logger.info("✅ AutoFW task started")
     while True:
-        for client in navy._ubot:
+        for client in star._ubot:
             if (
                 await dB.get_var(client.me.id, "AUTOFW")
                 and client.me.id not in AUTOFW_STATUS
@@ -129,7 +129,7 @@ async def AutoFW():
 async def AutoFW():
     logger.info("✅ AutoFW tasks started")
     while True:
-        for client in navy._ubot:
+        for client in star._ubot:
             if (
                 await dB.get_var(client.me.id, "AUTOFW")
                 and client.me.id not in AUTOFW_STATUS
