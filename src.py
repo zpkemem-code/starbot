@@ -5,7 +5,7 @@ from pyrogram.errors import (AuthKeyDuplicated, AuthKeyUnregistered,
                              SessionRevoked, UserAlreadyParticipant,
                              UserDeactivated, UserDeactivatedBan)
 
-from clients import UserBot, bot, navy
+from clients import UserBot, bot, star
 from config import (BLACKLIST_KATA, LOG_SELLER, OWNER_ID, WAJIB_JOIN,
                     costum_font)
 from database import dB
@@ -89,7 +89,7 @@ async def start_main_bot():
     await bot.start()
     await bot.add_reseller()
     logger.info("✅ Main bot started successfully.")
-    total_bots = len(navy._ubot)
+    total_bots = len(star._ubot)
     message = "🔥**Bot berhasil diaktifkan**🔥\n" f"✅ **Total User: {total_bots}**"
     await dB.set_var(bot.id, "total_users", total_bots)
     try:
