@@ -1,4 +1,4 @@
-from clients import navy
+from clients import star
 from command import deleter_cmd, force_del_cmd
 from helpers import CMD
 
@@ -23,6 +23,6 @@ async def _(client, message):
     return await deleter_cmd(client, message)
 
 
-@CMD.NO_CMD("FORCE_DEL", navy)
+@CMD.NO_CMD("FORCE_DEL", star)
 async def _(client, message):
     return await force_del_cmd(client, message)
