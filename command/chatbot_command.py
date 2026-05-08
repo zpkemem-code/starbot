@@ -6,7 +6,7 @@ import traceback
 from pyrogram import enums, errors
 
 import config
-from clients import navy
+from clients import star
 from database import dB
 from helpers import (MessageFilter, Tools, get_cached_list, reply_same_type,
                      url_mmk)
@@ -386,7 +386,7 @@ async def process_queue(client, q):
 async def ChatbotTask():
     while True:
         try:
-            for client in navy._ubot:
+            for client in star._ubot:
                 chats = await get_cached_list(
                     dB.get_list_from_var, client.me.id, "CHATBOT"
                 )
