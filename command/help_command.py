@@ -2,7 +2,7 @@ import asyncio
 
 from pyrogram.types import InlineKeyboardMarkup
 
-from clients import navy
+from clients import star
 from config import BOT_NAME, HELPABLE, USENAME_OWNER
 from database import dB
 from helpers import paginate_modules
@@ -50,7 +50,7 @@ async def general_plugins(client, message):
         name: data for name, data in HELPABLE.items() if plan["filter_func"](name, data)
     }
 
-    prefix = navy.get_prefix(user_id)
+    prefix = star.get_prefix(user_id)
     text_help = (
         await dB.get_var(user_id, "text_help")
         or f"**🤖 {BOT_NAME} by {USENAME_OWNER}**"
