@@ -9,7 +9,7 @@ from time import time
 
 from pyrogram import enums, raw
 from pyrogram.enums import ChatMemberStatus, ChatType, StoriesPrivacyRules
-from pyrogram.errors import (ChannelPrivate, FloodPremiumWait, FloodWait,
+from pyrogram.errors import (ChannelPrivate, FloodWait,
                              PeerIdInvalid, UsernameOccupied,
                              UserNotParticipant)
 from pyrogram.raw import functions
