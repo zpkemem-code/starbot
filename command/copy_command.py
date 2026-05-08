@@ -41,7 +41,7 @@ async def copyall_cmd(client, message):
 
     if len(args) < 2:
         return await message.reply(
-            f"**Please give link**\nExample: `{message.text.split()[0]} https://t.me/kynansupport/1745 5`"
+            f"**Please give link**\nExample: `{message.text.split()[0]} https://t.me/quotedamn 5`"
         )
     proses = await animate_proses(message, em.proses)
     chat_id = message.chat.id
