@@ -25,7 +25,7 @@ async def resetuser_needed(client, message):
 async def reset_costum_text(client, message):
     user_id = message.from_user.id
     proses = await message.reply("<b>Processing...</b>")
-    if user_id not in navy._get_my_id:
+    if user_id not in star._get_my_id:
         return await proses.edit(
             f"<b>You are not user @{bot.me.username}!!</b>",
             reply_markup=ReplyKeyboardRemove(),
@@ -52,7 +52,7 @@ async def reset_costum_text(client, message):
 async def reset_emoji(client, message):
     user_id = message.from_user.id
     proses = await message.reply("<b>Processing...</b>")
-    if user_id not in navy._get_my_id:
+    if user_id not in star._get_my_id:
         return await proses.edit(
             f"<b>You are not user @{bot.me.username}!!</b>",
             reply_markup=ReplyKeyboardRemove(),
