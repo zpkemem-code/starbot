@@ -26,7 +26,7 @@ import qrcode
 import requests
 from httpx import AsyncClient, Timeout
 from pyrogram import enums, types
-from pyrogram.errors import FloodPremiumWait, FloodWait, MessageNotModified
+from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import ChatPrivileges, MessageEntity
 
 from clients import bot
@@ -393,14 +393,14 @@ class Tools:
                     await message.edit(
                         "{}\n**File Name:** `{}`\n{}".format(type_of_ps, file_name, tmp)
                     )
-                except (FloodWait, FloodPremiumWait) as e:
+                except FloodWait as e:
                     await asyncio.sleep(e.x)
                 except MessageNotModified:
                     pass
             else:
                 try:
                     await message.edit("{}\n{}".format(type_of_ps, tmp))
-                except (FloodWait, FloodPremiumWait) as e:
+                except FloodWait as e:
                     await asyncio.sleep(e.x)
                 except MessageNotModified:
                     pass
@@ -913,7 +913,7 @@ class Tools:
             await Tools._handle_media(
                 media_msg, client, proses, message, msg, text, story
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             await asyncio.sleep(e.value)
             await Tools._handle_media(
                 media_msg, client, proses, message, msg, text, story
