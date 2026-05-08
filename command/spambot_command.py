@@ -1,7 +1,7 @@
 from asyncio import sleep
 
 from pyrogram import raw
-from pyrogram.errors import FloodPremiumWait, FloodWait
+from pyrogram.errors import FloodWait
 
 from helpers import Emoji, animate_proses
 
@@ -34,7 +34,7 @@ async def spam_bot(client, message):
             await client.invoke(
                 raw.functions.messages.DeleteHistory(peer=xin, max_id=0, revoke=True)
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             await sleep(e.value)
             await client.invoke(
                 raw.functions.messages.DeleteHistory(peer=xin, max_id=0, revoke=True)
