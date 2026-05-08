@@ -10,7 +10,7 @@ from pyrogram.types import (KeyboardButton, ReplyKeyboardMarkup,
                             ReplyKeyboardRemove)
 from pytz import timezone
 
-from clients import UserBot, bot, navy
+from clients import UserBot, bot, star
 from config import (AKSES_DEPLOY, API_HASH, API_ID, BOT_ID, LOG_SELLER,
                     MAX_BOT, SUDO_OWNERS, WAJIB_JOIN)
 from database import dB
@@ -32,7 +32,7 @@ async def setExpiredUser(user_id):
 
 async def mari_buat_userbot(client, message):
     user_id = message.from_user.id
-    if len(navy._ubot) == MAX_BOT:
+    if len(star._ubot) == MAX_BOT:
         buttons = ikb(
             [[("💬 Hubungi Admins", "calladmins")], [("🔙 Back", "starthome")]]
         )
@@ -40,7 +40,7 @@ async def mari_buat_userbot(client, message):
             f"""
 <b>❌ Tidak dapat membuat Userbot !</b>
 
-<b>📚 Karena Telah Mencapai Yang Telah Di Tentukan : {len(navy._ubot)}</b>
+<b>📚 Karena Telah Mencapai Yang Telah Di Tentukan : {len(star._ubot)}</b>
 
 <b>👮‍♂ Silakan Hubungi Admins . </b>
 """,
@@ -203,7 +203,7 @@ async def create_userbots(client, message):
             disable_web_page_preview=True,
         )
         await asyncio.sleep(2)
-        kn_client = UserBot(
+        star_client = UserBot(
             name=str(user_id),
             api_id=API_ID,
             api_hash=API_HASH,
@@ -211,49 +211,49 @@ async def create_userbots(client, message):
             in_memory=True,
         )
         try:
-            await kn_client.start()
+            await star_client.start()
             for modul in PLUGINS:
                 importlib.reload(importlib.import_module(f"plugins.{modul}"))
         except Exception as e:
             logger.error(f"Error Client: {str(e)}")
-        if not await dB.get_expired_date(kn_client.me.id):
-            await setExpiredUser(kn_client.me.id)
+        if not await dB.get_expired_date(star_client.me.id):
+            await setExpiredUser(star_client.me.id)
         await dB.add_ubot(
-            user_id=int(kn_client.me.id),
+            user_id=int(star_client.me.id),
             session_string=session_string,
         )
-        if not user_id == kn_client.me.id:
-            navy._ubot.remove(kn_client)
-            await dB.remove_ubot(kn_client.me.id)
-            await kn_client.log_out()
+        if not user_id == star_client.me.id:
+            star._ubot.remove(star_client)
+            await dB.remove_ubot(star_client.me.id)
+            await star_client.log_out()
             return await bot_msg.edit(
                 f"<blockquote><b>Gunakan akun anda sendiri, bukan orang lain!!</b></blockquote>"
             )
-        user_token = await dB.generate_token(kn_client.me.id)
+        user_token = await dB.generate_token(star_client.me.id)
         await asyncio.sleep(1)
         seles = await dB.get_list_from_var(BOT_ID, "SELLER")
-        if kn_client.me.id not in seles:
+        if star_client.me.id not in seles:
             try:
-                AKSES_DEPLOY.remove(kn_client.me.id)
+                AKSES_DEPLOY.remove(star_client.me.id)
             except Exception:
                 pass
         for chat in WAJIB_JOIN:
             try:
-                await kn_client.join_chat(chat)
+                await star_client.join_chat(chat)
             except Exception:
                 pass
-        prefix = navy.get_prefix(kn_client.me.id)
+        prefix = star.get_prefix(star_client.me.id)
         keyb = ButtonUtils.start_menu(is_admin=False)
-        exp = await dB.get_expired_date(kn_client.me.id)
+        exp = await dB.get_expired_date(star_client.me.id)
         PLAN = (
-            "basic" if await dB.get_var(kn_client.me.id, "plan") == "basic" else "pro"
+            "basic" if await dB.get_var(star_client.me.id, "plan") == "basic" else "pro"
         )
         expir = exp.astimezone(timezone("Asia/Jakarta")).strftime("%Y-%m-%d %H:%M")
-        await dB.set_var(kn_client.me.id, "USER_TOKEN", user_token)
+        await dB.set_var(star_client.me.id, "USER_TOKEN", user_token)
         text_done = f"""
 <blockquote expandable><b>🔥 {bot.me.mention} Berhasil Di Aktifkan
-➡️ Akun: <a href=tg://openmessage?user_id={kn_client.me.id}>{kn_client.me.first_name} {kn_client.me.last_name or ''}</a>
-➡️ ID: <code>{kn_client.me.id}</code>
+➡️ Akun: <a href=tg://openmessage?user_id={star_client.me.id}>{star_client.me.first_name} {star_client.me.last_name or ''}</a>
+➡️ ID: <code>{star_client.me.id}</code>
 ➡️ Plan: <b>{PLAN}</b>
 ➡️ Prefixes: {' '.join(prefix)}
 ➡️ Token: <code>{user_token}</code>
@@ -267,15 +267,15 @@ Mohon simpan Token kamu dengan aman.</b></blockquote>"""
             LOG_SELLER,
             f"""
 <b>❏ Notifikasi Userbot Aktif</b>
-<b>├ Akun :</b> <a href=tg://user?id={kn_client.me.id}>{kn_client.me.first_name} {kn_client.me.last_name or ''}</a> 
-<b>├ ID :</b> <code>{kn_client.me.id}</code>
+<b>├ Akun :</b> <a href=tg://user?id={star_client.me.id}>{star_client.me.first_name} {star_client.me.last_name or ''}</a> 
+<b>├ ID :</b> <code>{star_client.me.id}</code>
 <b>╰ User Token :</b> <code>{user_token}</code>""",
             reply_markup=ikb(
                 [
                     [
                         (
                             "Cek Kadaluarsa",
-                            f"cek_masa_aktif {kn_client.me.id}",
+                            f"cek_masa_aktif {star_client.me.id}",
                             "callback_data",
                         )
                     ]
