@@ -850,7 +850,7 @@ async def inviteall_cmd(client, message):
     proses = await animate_proses(message, em.proses)
     if len(message.command) < 2:
         return await proses.edit(
-            f"{em.gagal}**Invalid command, Example: `{message.text.split()[0]} @disininavy`"
+            f"{em.gagal}**Invalid command, Example: `{message.text.split()[0]} @tuhant3l3`"
         )
     source_chat_username = message.command[1]
     try:
