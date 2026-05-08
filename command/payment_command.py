@@ -10,7 +10,7 @@ from pytz import timezone
 
 from clients import bot
 from config import (AKSES_DEPLOY, IS_JASA_PRIVATE, LOG_SELLER, OWNER_ID,
-                    SAWERIA_EMAIL, SAWERIA_USERID, SAWERIA_USERNAME)
+                    SAWERIA_EMAIL, SAWERIA_USERID, SAWERIA_NAME)
 from database import dB
 from helpers import ButtonUtils, Emoji, Message, Saweria
 from logs import logger
