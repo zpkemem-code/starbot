@@ -45,7 +45,7 @@ async def gen_image(client):
 
 async def setimg_start(client, message):
     user = message.from_user if message.from_user else message.sender_chat
-    if user.id not in KYNAN:
+    if user.id not in STARX:
         return
     if message.reply_to_message:
         proses = await message.reply("<blockquote>**Tunggu sebentar..**</blockquote>")
@@ -80,7 +80,7 @@ async def setimg_start(client, message):
 
 async def setads_bot(client, message):
     user = message.from_user if message.from_user else message.sender_chat
-    if user.id not in KYNAN:
+    if user.id not in STARX:
         return
     if not message.reply_to_message:
         return await message.reply("**Silahkan balas ke teks**")
