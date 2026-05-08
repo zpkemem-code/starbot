@@ -71,7 +71,7 @@ text_formatting = """
 > Contoh callback answer`Halo Disini [Tombol 1|alert:Yang klik jelek][Tombol 2|alert:Jangan diklik Tapi boong|same]`
 >
 > Anda juga dapat membuat teks collapsed dengan button
-> Contoh `<blockquote expandable>Aku adalah NavyUbot yang dikembang oleh @kenpanan dan aku adalah userbot generasi ke 3 setelah KN-Userbot Aku lebih sempurna dari generasi sebelumnya karna aku dibuat dengan memprioritaskan flexibilitas</blockquote> [Owner|https://t.me/kenapanan]`
+> Contoh `<blockquote expandable>Aku adalah NavyUbot yang dikembang oleh @tuhant3l3 dan aku adalah userbot generasi ke 3 setelah Star-Userbot Aku lebih sempurna dari generasi sebelumnya karna aku dibuat dengan memprioritaskan flexibilitas</blockquote> [Owner|https://t.me/tuhant3l3]`
 >
 """
 
