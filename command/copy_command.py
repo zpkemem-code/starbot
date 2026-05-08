@@ -3,7 +3,7 @@ import os
 import traceback
 
 from pyrogram import enums
-from pyrogram.errors import FloodPremiumWait, FloodWait, RPCError
+from pyrogram.errors import FloodWait, RPCError
 
 from helpers import Emoji, Tools, animate_proses
 from logs import logger
@@ -12,7 +12,7 @@ from logs import logger
 async def safe_download(client, msg):
     try:
         return await client.download_media(msg)
-    except (FloodWait, FloodPremiumWait) as fw:
+    except FloodWait as fw:
         await asyncio.sleep(fw.value)
         return await client.download_media(msg)
 
@@ -79,7 +79,7 @@ async def copyall_cmd(client, message):
                 ]:
                     try:
                         await msg.copy(chat_id)
-                    except (FloodWait, FloodPremiumWait) as wet:
+                    except FloodWait as wet:
                         await asyncio.sleep(wet.value)
                         await msg.copy(chat_id)
                     except Exception:
@@ -91,7 +91,7 @@ async def copyall_cmd(client, message):
                     successful_copies += 1
                     counter += 1
 
-            except (FloodWait, FloodPremiumWait) as flood:
+            except FloodWait as flood:
                 logger.error(f"FloodWait: Waiting for {flood.value} seconds")
                 await asyncio.sleep(flood.value)
             except RPCError as rpc_error:
