@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from pyrogram import enums
-from pyrogram.errors import (AdminRankEmojiNotAllowed, FloodPremiumWait,
+from pyrogram.errors import (AdminRankEmojiNotAllowed,
                              FloodWait, PeerIdInvalid, UsernameInvalid,
                              UsernameNotOccupied)
 from pyrogram.types import ChatPermissions, ChatPrivileges
@@ -357,7 +357,7 @@ async def zombies_cmd(client, message):
             try:
                 await message.chat.ban_member(deleted_user)
                 banned_users += 1
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 await asyncio.sleep(e.value)
                 await mt.edit(f"**FloodWait waiting for `{e.value}` seconds!**")
             except Exception:
