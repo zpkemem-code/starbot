@@ -5,7 +5,7 @@ from pyrogram.errors import FloodPremiumWait, FloodWait
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
 
 from clients import bot, star
-from config import (BOT_ID, FAKE_DEVS, IS_JASA_PRIVATE, KYNAN, LOG_SELLER,
+from config import (BOT_ID, FAKE_DEVS, IS_JASA_PRIVATE, STARX, LOG_SELLER,
                     OWNER_ID, SUDO_OWNERS)
 from database import dB
 from logs import logger
