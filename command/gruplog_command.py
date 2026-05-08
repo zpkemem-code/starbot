@@ -6,7 +6,7 @@ from enum import IntEnum, unique
 
 from pyrogram import enums
 from pyrogram.errors import (ChannelInvalid, ChannelPrivate,
-                             ChatForwardsRestricted, FloodPremiumWait,
+                             ChatForwardsRestricted,
                              FloodWait, MediaCaptionTooLong, MessageIdInvalid,
                              MessageTooLong, PeerIdInvalid)
 from pyrogram.helpers import ikb
@@ -365,7 +365,7 @@ async def LOGS_GROUP(client, message):
             return f"Error MessageIdInvalid {message.chat.id}"
         except ChannelPrivate:
             return f"Error ChannelPrivate {message.chat.id}"
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             await asyncio.sleep(e.value)
             if message_type in ["sticker", "video_note"]:
                 kwargs = {
@@ -486,7 +486,7 @@ async def send_to_pm(
             if os.path.exists(file_path):
                 os.remove(file_path)
             return
-    except (FloodWait, FloodPremiumWait) as e:
+    except FloodWait as e:
         await asyncio.sleep(e.value)
         return await send_to_pm(
             client,
