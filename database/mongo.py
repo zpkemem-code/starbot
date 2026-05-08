@@ -2,15 +2,15 @@ from typing import List
 
 from pymongo import AsyncMongoClient
 
-from config import Config
+from config import *
 
 
 class MongoDB:
     def __init__(self) -> None:
         self.mongo = AsyncMongoClient(
-            Config.mongo_url(),
+            config.mongo_url(),
         )
-        self.db = self.mongo.Teiko
+        self.db = self.mongo.Star
 
         self.nks = self.db.nokos
 
