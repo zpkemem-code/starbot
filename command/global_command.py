@@ -1,7 +1,7 @@
 import asyncio
 from io import BytesIO
 
-from pyrogram.errors import (FloodPremiumWait, FloodWait, PeerIdInvalid,
+from pyrogram.errors import (FloodWait, PeerIdInvalid,
                              UsernameInvalid, UsernameNotOccupied)
 from pyrogram.raw.functions.messages import DeleteHistory
 from pyrogram.types import ChatPermissions
@@ -63,7 +63,7 @@ async def gban_cmd(client, message):
                 await asyncio.sleep(0.1)
             except Exception:
                 fail += 1
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 await asyncio.sleep(int(e.value))
                 await client.ban_chat_member(chat, user_id)
                 done += 1
@@ -128,7 +128,7 @@ async def ungban_cmd(client, message):
                 await asyncio.sleep(0.1)
             except Exception:
                 fail += 1
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 await asyncio.sleep(int(e.value))
                 await client.unban_chat_member(chat, user_id)
                 done += 1
@@ -228,7 +228,7 @@ async def gmute_cmd(client, message):
                 await asyncio.sleep(0.1)
             except Exception:
                 fail += 1
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 await asyncio.sleep(int(e.value))
                 await client.restrict_chat_member(chat, user_id, ChatPermissions())
                 done += 1
@@ -291,7 +291,7 @@ async def ungmute_cmd(client, message):
                 await asyncio.sleep(0.1)
             except Exception:
                 fail += 1
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 await asyncio.sleep(int(e.value))
                 await client.unban_member(chat, user_id, ChatPermissions())
                 done += 1
