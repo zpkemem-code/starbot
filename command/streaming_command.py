@@ -2,7 +2,7 @@ import asyncio
 import os
 from uuid import uuid4
 
-from pyrogram.errors import FloodPremiumWait, FloodWait
+from pyrogram.errors import FloodWait
 from pytgcalls.exceptions import NotInCallError
 
 from config import URL_LOGO
@@ -461,7 +461,7 @@ async def play_cmd(client, message):
                     user_mention,
                 ),
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
             await message.reply(
