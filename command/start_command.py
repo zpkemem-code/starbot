@@ -4,7 +4,7 @@ import random
 from pyrogram import enums
 
 from clients import bot
-from config import KYNAN, LOG_SELLER, SUDO_OWNERS
+from config import STARX, LOG_SELLER, SUDO_OWNERS
 from database import dB, state
 from helpers import Basic_Effect, ButtonUtils, Message, Tools, no_commands
 from logs import logger
