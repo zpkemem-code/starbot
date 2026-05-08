@@ -14,13 +14,13 @@ from logs import logger
 
 async def animate_proses(message, proses):
     if message._client.me.is_premium == True:
-        effect_id = random.choice(Premium_Effect)
+        message_effect_id = random.choice(Premium_Effect)
     else:
-        effect_id = random.choice(Basic_Effect)
+        message_effect_id = random.choice(Basic_Effect)
     try:
         if message.chat.type == enums.ChatType.PRIVATE:
             msg = await message.reply(
-                f"{proses}**Please wait...**", effect_id=effect_id
+                f"{proses}**Please wait...**", message_effect_id=message_effect_id
             )
         else:
             msg = await message.reply(f"{proses}**Please wait...**")
