@@ -10,9 +10,9 @@ __HELP__ = """<blockquote>Command Help **Quote**</blockquote>
     **You can make quote from text using costum color**
         `{0}q pink` (reply message)
     **You can make fake quote user the message with this message**
-        `{0}q @navyfavbot` (reply message)
+        `{0}q @usernamebot` (reply message)
     **You can make fake quote user with replies and costum color**
-        `{0}q @navyfavbot pink -r` (reply message)</blockquote>
+        `{0}q @usernamebot pink -r` (reply message)</blockquote>
 
 <blockquote expandable>--**Extras Commands**--
 
