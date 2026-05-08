@@ -1,4 +1,4 @@
-from clients import navy
+from clients import star
 from command import (add_prem_user, add_seller, cb_evalusi, cb_gitpull2,
                      cb_shell, dne_plugins, plugins_cmd, seller_cmd, set_plan,
                      un_prem_user, un_seller)
@@ -37,20 +37,20 @@ async def _(client, message):
 
 @CMD.UBOT("shell|sh")
 @CMD.NLX
-async def _(client: navy, message):
+async def _(client: star, message):
     return await cb_shell(client, message)
 
 
 @CMD.UBOT("eval|ev|e")
 @CMD.NLX
 @CMD.DEV_CMD("ceval")
-async def _(client: navy, message):
+async def _(client: star, message):
     return await cb_evalusi(client, message)
 
 
 @CMD.UBOT("reboot|update|reload")
 @CMD.FAKE_NLX
-async def _(client: navy, message):
+async def _(client: star, message):
     return await cb_gitpull2(client, message)
 
 
