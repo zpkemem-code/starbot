@@ -1,7 +1,7 @@
 import asyncio
 
 from pyrogram import enums
-from pyrogram.errors import (ChannelPrivate, FloodPremiumWait, FloodWait,
+from pyrogram.errors import (ChannelPrivate, FloodWait,
                              PeerIdInvalid, UserBannedInChannel)
 from pyrogram.raw.functions.messages import ReadMentions
 
@@ -30,7 +30,7 @@ async def safe_read_history(client, chat_id):
         await client.read_chat_history(chat_id, max_id=0)
     except (ChannelPrivate, PeerIdInvalid, UserBannedInChannel):
         pass
-    except (FloodWait, FloodPremiumWait) as e:
+    except FloodWait as e:
         await asyncio.sleep(e.value)
         await safe_read_history(client, chat_id)
 
@@ -40,7 +40,7 @@ async def safe_invoke_read_mentions(client, chat_id):
         await client.invoke(ReadMentions(peer=await client.resolve_peer(chat_id)))
     except (ChannelPrivate, PeerIdInvalid, UserBannedInChannel):
         pass
-    except (FloodWait, FloodPremiumWait) as e:
+    except FloodWait as e:
         await asyncio.sleep(e.value)
         await safe_invoke_read_mentions(client, chat_id)
 
