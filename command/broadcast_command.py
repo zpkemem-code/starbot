@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from pyrogram.enums import ChatType
-from pyrogram.errors import (ChannelPrivate, ChatSendPlainForbidden,
+from pyrogram.errors import (ChannelPrivate,
                              ChatWriteForbidden, FloodPremiumWait, FloodWait,
                              Forbidden, NotAcceptable, PeerFlood,
                              PeerIdInvalid, SlowmodeWait, UserBannedInChannel)
@@ -89,10 +89,10 @@ async def bc_cmd(client, message):
                 failed += 1
                 continue
 
-            except ChatSendPlainForbidden:
-                error += f"ChatSendPlainForbidden or ga bisa kirim teks {chat_id}\n"
-                failed += 1
-                continue
+            # except ChatSendPlainForbidden:
+                # error += f"ChatSendPlainForbidden or ga bisa kirim teks {chat_id}\n"
+                # failed += 1
+                # continue
 
             except UserBannedInChannel:
                 error += f"UserBannedInChannel or lu limit {chat_id}\n"
@@ -222,10 +222,10 @@ async def gcast_cmd(client, message):
                 failed += 1
                 continue
 
-            except ChatSendPlainForbidden:
-                error += f"ChatSendPlainForbidden or ga bisa kirim teks {chat_id}\n"
-                failed += 1
-                continue
+            # except ChatSendPlainForbidden:
+                # error += f"ChatSendPlainForbidden or ga bisa kirim teks {chat_id}\n"
+                # failed += 1
+                # continue
 
             except UserBannedInChannel:
                 error += f"UserBannedInChannel or lu limit {chat_id}\n"
