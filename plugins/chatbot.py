@@ -1,4 +1,4 @@
-from clients import navy
+from clients import star
 from command import auto_reply_trigger, chatbot_cmd
 from helpers import CMD
 
@@ -39,6 +39,6 @@ async def _(client, message):
     return await chatbot_cmd(client, message)
 
 
-@CMD.NO_CMD("CHATBOT", navy)
+@CMD.NO_CMD("CHATBOT", star)
 async def _(client, message):
     return await auto_reply_trigger(client, message)
