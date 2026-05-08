@@ -7,8 +7,8 @@ from pyrogram.errors import (ChannelInvalid, FloodWait, InputUserDeactivated,
 from pyrogram.helpers import kb
 from pytz import timezone
 
-from clients import bot, navy
-from config import (AKSES_DEPLOY, BOT_ID, IS_JASA_PRIVATE, KYNAN, LOG_SELLER,
+from clients import bot, star
+from config import (AKSES_DEPLOY, BOT_ID, IS_JASA_PRIVATE, STARX, LOG_SELLER,
                     SUDO_OWNERS)
 from database import dB
 
@@ -17,7 +17,7 @@ from .addubot_command import setExpiredUser
 
 async def sewa_expired(client, message):
     user = message.from_user if message.from_user else message.sender_chat
-    if user.id not in KYNAN:
+    if user.id not in STARX:
         return
     if len(message.command) < 2:
         return await message.reply(">**Gunakan perintah: /sewa total-hari**")
@@ -285,7 +285,7 @@ async def mass_report(client, message):
                 "and promotes harmful content. Under platform guidelines, this account "
                 "should be suspended. Please review and take appropriate action."
             )
-            for user in navy._ubot:
+            for user in star._ubot:
                 try:
                     peer = await user.resolve_peer(uname)
                 except UsernameNotOccupied:
