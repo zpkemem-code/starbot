@@ -5,7 +5,7 @@ from pyrogram.errors import (ChannelPrivate, FloodPremiumWait, FloodWait,
                              PeerIdInvalid, UserBannedInChannel)
 from pyrogram.raw.functions.messages import ReadMentions
 
-from clients import navy
+from clients import star
 from database import dB
 from logs import logger
 
@@ -66,6 +66,6 @@ async def auto_read(client, mode):
 
 async def ReadUser():
     logger.info("✅ AutoRead task started.")
-    for client in navy._ubot:
+    for client in star._ubot:
         for mode in CHAT_TYPES:
             asyncio.create_task(auto_read(client, mode))
