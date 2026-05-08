@@ -7,7 +7,7 @@ from pyrogram.errors import QueryIdInvalid, RPCError
 from pyrogram.helpers import ikb, kb
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from database import dB, state
+from database import dB, state, db
 
 COLUMN_SIZE = 4  # Controls the button number of height
 NUM_COLUMNS = 2  # Controls the button number of width
