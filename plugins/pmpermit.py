@@ -1,4 +1,4 @@
-from clients import navy
+from clients import star
 from command import AUTO_APPROVE, PMPERMIT, nopm_cmd, okpm_cmd, pmpermit_cmd
 from helpers import CMD
 
@@ -62,11 +62,11 @@ async def _(client, message):
     return await nopm_cmd(client, message)
 
 
-@CMD.NO_CMD("PMPERMIT", navy)
+@CMD.NO_CMD("PMPERMIT", star)
 async def _(client, message):
     return await PMPERMIT(client, message)
 
 
-@CMD.NO_CMD("AUTO_APPROVE", navy)
+@CMD.NO_CMD("AUTO_APPROVE", star)
 async def _(client, message):
     return await AUTO_APPROVE(client, message)
