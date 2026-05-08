@@ -13,7 +13,7 @@ from command import (an1cb, back_home, bola_date, bola_matches,
                      refresh_cat, reset_costum_text, reset_emoji, reset_prefix,
                      rest_anime, rest_comic, rest_donghua, restart_userbot,
                      selected_topic, token_cmd, tools_token, tools_userbot,
-                     user_aggre, viewchord, viewgempa, drakorcb)
+                     user_aggre, viewchord, viewgempa, drakorcb, cb_page_shop, cb_shop)
 from helpers import CMD, trigger
 from logs import logger
 
@@ -156,6 +156,10 @@ async def _(client, callback):
         elif query.startswith("selectedtopic_"):
             return await selected_topic(client, callback)
         elif query.startswith("drakorcb_"):
-            return await drakorcb(client, callback)            
+            return await drakorcb(client, callback)
+        elif query.startswith("list_nokos_"):
+            return await cb_page_shop(client, callback)
+        elif query.startswith("shop"):
+            return await cb_shop(client, callback)
     except Exception:
         logger.error(f"Callback error: {traceback.format_exc()}")
