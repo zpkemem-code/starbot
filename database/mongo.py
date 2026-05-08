@@ -8,7 +8,7 @@ from config import *
 class MongoDB:
     def __init__(self) -> None:
         self.mongo = AsyncMongoClient(
-            config.MONGO_DB_URI(),
+            config.MONGO_DB_URI,
         )
         self.db = self.mongo.Star
 
