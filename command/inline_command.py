@@ -1371,7 +1371,7 @@ async def button_inline(result, _, user_id):
 
 async def get_inline_help(result, inline_query):
     user_id = inline_query.from_user.id
-    prefix = navy.get_prefix(user_id)
+    prefix = star.get_prefix(user_id)
     plan = await dB.get_var(user_id, "plan")
     plan_teks = None
     if plan == "is_pro":
@@ -1429,7 +1429,7 @@ async def alive_inline(result, inline_query):
     start = datetime.now()
     ping = (datetime.now() - start).microseconds / 1000
     upnya = await get_time((time() - start_time))
-    me = next((x for x in navy._ubot), None)
+    me = next((x for x in star._ubot), None)
     try:
         peer = navy._get_my_peer[self]
         users = len(peer["private"])
@@ -1463,7 +1463,7 @@ async def alive_inline(result, inline_query):
       <b>anti_pm:</b> <code>{pmper}</code>
       <b>peer_users:</b> <code>{users} users</code>
       <b>peer_group:</b> <code>{group} group</code>
-      <b>peer_ubot:</b> <code>{len(navy._ubot)} ubot</code>
+      <b>peer_ubot:</b> <code>{len(star._ubot)} ubot</code>
       <b>uptime:</b> <code>{upnya}</code>
       <b>expires:</b> <code>{exp}</code>
 """
