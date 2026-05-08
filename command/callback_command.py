@@ -1238,7 +1238,7 @@ async def closed_bot(_, cq):
 async def nxt_spotify(_, callback_query):
     if not callback_query.from_user:
         return await callback_query.answer("ANAK ANJING!!", True)
-    if callback_query.from_user.id not in navy._get_my_id:
+    if callback_query.from_user.id not in star._get_my_id:
         return await callback_query.answer("GW BUNTUNGIN TANGAN LO YA MEMEK", True)
     data = callback_query.data.split("_")
     await callback_query.answer("Please wait a minute", True)
