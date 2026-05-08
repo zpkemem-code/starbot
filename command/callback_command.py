@@ -7,7 +7,7 @@ from gc import get_objects
 import requests
 import wget
 from pyrogram import enums, raw
-from pyrogram.errors import FloodPremiumWait, FloodWait, MessageNotModified
+from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.helpers import ikb
 from pyrogram.types import InlineKeyboardButton as Ikb
 from pyrogram.types import (InlineKeyboardMarkup, InputMediaAnimation,
@@ -125,7 +125,7 @@ async def cb_markdown(_, callback_query):
                 parse_mode=enums.ParseMode.MARKDOWN,
             )
 
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
@@ -148,7 +148,7 @@ async def cb_markdown(_, callback_query):
                 **{costum_text: text},
                 reply_markup=button,
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
@@ -241,7 +241,7 @@ async def cb_help(_, callback_query):
                     **{costum_text: text_markdown},
                     reply_markup=button_,
                 )
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 return await callback_query.answer(
                     f"FloodWait {e}, Please Waiting!!", True
                 )
@@ -261,7 +261,7 @@ async def cb_help(_, callback_query):
                     **{costum_text: bot_text},
                     reply_markup=button,
                 )
-            except (FloodWait, FloodPremiumWait) as e:
+            except FloodWait as e:
                 return await callback_query.answer(
                     f"FloodWait {e}, Please Waiting!!", True
                 )
@@ -286,7 +286,7 @@ async def cb_help(_, callback_query):
                     paginate_modules(curr_page, visible_helpable, "help", is_bot=is_bot)
                 ),
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
@@ -308,7 +308,7 @@ async def cb_help(_, callback_query):
                     paginate_modules(next_page, visible_helpable, "help", is_bot=is_bot)
                 ),
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
@@ -332,7 +332,7 @@ async def cb_help(_, callback_query):
                     )
                 ),
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
@@ -353,7 +353,7 @@ async def cb_help(_, callback_query):
                     paginate_modules(0, visible_helpable, "help", is_bot=is_bot)
                 ),
             )
-        except (FloodWait, FloodPremiumWait) as e:
+        except FloodWait as e:
             return await callback_query.answer(f"FloodWait {e}, Please Waiting!!", True)
 
         except MessageNotModified:
