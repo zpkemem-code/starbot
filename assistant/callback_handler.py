@@ -73,6 +73,17 @@ async def _(client, message):
             return await message.reply(
                 "Development:\nhttps://t.me/TuhanT3l3"
             )
+       elif text == "↩️ Kembali":
+            buttons = ButtonUtils.start_com_button()
+
+            text_msg = await Message.welcome_message(client, message)
+
+            return await message.reply(
+                text_msg,
+                reply_markup=buttons,
+                disable_web_page_preview=True,
+                message_effect_id=random.choice(Basic_Effect),
+            )
 
     except Exception as er:
         logger.error(f"Terjadi error: {str(er)}")
@@ -87,7 +98,8 @@ async def _(client, callback):
             return await closed_bot(client, callback)
         elif query == "starthome":
             return await back_home(client, callback)
-
+        elif query == "start_home":
+            return await back_awal(client, callback)
         elif query.startswith("close"):
             return await closed_user(client, callback)
         elif query.startswith("pm_warn"):
