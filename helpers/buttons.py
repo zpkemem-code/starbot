@@ -486,7 +486,7 @@ class ButtonUtils:
                         [
                             InlineKeyboardButton(
                                 "🏠 Beranda",
-                                callback_data="open_nokos"
+                                callback_data="back_home_nokos"
                             )
                         ]
                     ]
