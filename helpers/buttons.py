@@ -507,15 +507,11 @@ class ButtonUtils:
 
         text = (
             "<blockquote><b>📱 Beli Akun Telegram</b></blockquote>\n\n"
-            "📦 <b>Cek Stok</b> — Ketersediaan per tipe ID\n"
-            "📋 <b>Peraturan</b> — Baca sebelum beli\n"
-            "🧾 <b>Riwayat</b> — Histori transaksi Anda\n"
-            "🛒 <b>Order Akun</b> — Beli sekarang\n\n"
             f"<b>📊 Total:</b> <code>{total_items}</code>\n"
             f"<b>📄 Page:</b> <code>{page + 1}/{max_pages}</code>\n\n"
         )
 
-        buy_buttons = []
+        buttons = []
 
         for num, doc in enumerate(current_items, start=start + 1):
             _id = doc.get("_id")
@@ -528,86 +524,25 @@ class ButtonUtils:
                 f"┗ <b>Status:</b> Available\n\n"
             )
 
-            buy_buttons.append(
+            buttons.append(
                 InlineKeyboardButton(
                     str(num),
                     callback_data=f"buy_id_{_id}"
                 )
             )
 
-        buttons = [
-            [
-                InlineKeyboardButton(
-                    "📦 Cek Stok",
-                    callback_data="noop"
-                ),
-                InlineKeyboardButton(
-                    "📋 Peraturan",
-                    callback_data="rules_nokos"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    "ID 1",
-                    callback_data="shop 1"
-                ),
-                InlineKeyboardButton(
-                    "ID 2",
-                    callback_data="shop 2"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    "ID 3",
-                    callback_data="shop 3"
-                ),
-                InlineKeyboardButton(
-                    "ID 4",
-                    callback_data="shop 4"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    "🧾 Riwayat",
-                    callback_data="history_nokos"
-                ),
-                InlineKeyboardButton(
-                    "🛒 Order Akun",
-                    callback_data="noop"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    "ID 1",
-                    callback_data="shop 1"
-                ),
-               InlineKeyboardButton(
-                    "ID 2",
-                    callback_data="shop 2"
-               ),
-            ],
-            [
-                InlineKeyboardButton(
-                    "ID 3",
-                    callback_data="shop 3"
-                ),
-                InlineKeyboardButton(
-                    "ID 4",
-                    callback_data="shop 4"
-                ),
-            ],
-        ]
+        keyboard = []
 
-        if buy_buttons:
-            rows = [
-                buy_buttons[i:i + 4]
-                for i in range(0, len(buy_buttons), 4)
-            ]
-
-            buttons.extend(rows)
+        if buttons:
+            keyboard.extend(
+                [
+                    buttons[i:i + 4]
+                    for i in range(0, len(buttons), 4)
+                ]
+            )
 
         nav_row = []
- 
+
         if page > 0:
             nav_row.append(
                 InlineKeyboardButton(
@@ -618,7 +553,7 @@ class ButtonUtils:
 
         nav_row.append(
             InlineKeyboardButton(
-                "🏠 Beranda",
+                "🏠 Back",
                 callback_data="open_nokos"
             )
         )
@@ -631,6 +566,6 @@ class ButtonUtils:
                 )
             )
 
-        buttons.append(nav_row)
+        keyboard.append(nav_row)
 
-        return text, InlineKeyboardMarkup(buttons)
+        return text, InlineKeyboardMarkup(keyboard)
