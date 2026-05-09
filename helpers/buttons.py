@@ -468,7 +468,7 @@ class ButtonUtils:
 
 
     @staticmethod
-    async def nokos(page: int):
+    async def nokos(page: int, category_id:None):
         list_nokos = await db.get_nokos()
 
         if not list_nokos:
