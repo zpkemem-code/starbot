@@ -468,28 +468,50 @@ class ButtonUtils:
 
 
     @staticmethod
-    async def nokos(page: int, category_id:None):
+    async def nokos(page: int = 0, category_id: str = None):
         list_nokos = await db.get_nokos()
 
         if not list_nokos:
-            return "Nokos tidak tersedia.", InlineKeyboardMarkup(
-                [
+            return (
+                "<b>Nokos tidak tersedia.</b>",
+                InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton(
-                            "Back",
-                            callback_data="open_nokos"
-                        )
+                        [
+                            InlineKeyboardButton(
+                                "🏠 Beranda",
+                                callback_data="open_nokos"
+                            )
+                        ]
                     ]
-                ]
+                )
             )
 
-        data = []
-        for id_nokos in data:
-            if id_nokos.startswith("1"):
-                data.append(id_nokos)
+        if category_id:
+            filtered = []
+
+            for x in list_nokos:
+                if str(x.get("_id")).startswith(str(category_id)):
+                    filtered.append(x)
+
+            list_nokos = filtered
 
         items_page = 4
         total_items = len(list_nokos)
+
+        if total_items == 0:
+            return (
+                f"<b>Tidak ada stok untuk ID {category_id}</b>",
+                InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                "🔙 Kembali",
+                                callback_data="open_nokos"
+                            )
+                        ]
+                    ]
+                )
+            )
 
         max_pages = ceil(total_items / items_page)
 
@@ -500,60 +522,113 @@ class ButtonUtils:
 
         current_items = list_nokos[start:end]
 
-        text = (
-            f"<b>Nokos List! ({total_items})</b> "
-            f"({page + 1}/{max_pages})\n\n"
-        )
+        text = f"""
+<blockquote><b>📱 Beli Akun Telegram</b></blockquote>
 
-        buttons = []
-        selection_row = []
+📦 <b>Cek Stok</b> — Ketersediaan per tipe ID
+📋 <b>Peraturan</b> — Baca sebelum beli
+🧾 <b>Riwayat</b> — Histori transaksi Anda
+🛒 <b>Order Akun</b> — Beli sekarang
+
+<b>📊 Total Stok:</b> <code>{total_items}</code>
+<b>📄 Halaman:</b> <code>{page + 1}/{max_pages}</code>
+
+"""
 
         for num, doc in enumerate(current_items, start=start + 1):
             _id = doc.get("_id")
             price = doc.get("price")
 
             text += (
-                f"<b>{num} - Noktel</b>\n"
-                f"<b>IDs: <code>{_id}</code>\n"
-                f"Price: <code>{price}</code></b>\n\n"
+                f"┏ <b>{num}. Nokos Telegram</b>\n"
+                f"┣ <b>ID:</b> <code>{_id}</code>\n"
+                f"┣ <b>Harga:</b> <code>{price}</code>\n"
+                f"┗ <b>Status:</b> Available\n\n"
             )
 
-            selection_row.append(
+        buttons = [
+            [
                 InlineKeyboardButton(
-                    text=str(num),
+                    "📦 Cek Stok",
+                    callback_data="cek_stok"
+                ),
+                InlineKeyboardButton(
+                    "📋 Peraturan",
+                    callback_data="rules_nokos"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "🧾 Riwayat",
+                    callback_data="history_nokos"
+                ),
+                InlineKeyboardButton(
+                    "🛒 Order Akun",
+                    callback_data="order_nokos"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "ID 1",
+                    callback_data="shop 1"
+                ),
+                InlineKeyboardButton(
+                    "ID 2",
+                    callback_data="shop 2"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "ID 3",
+                    callback_data="shop 3"
+                ),
+                InlineKeyboardButton(
+                    "ID 4",
+                    callback_data="shop 4"
+                ),
+            ]
+        ]
+
+        buy_buttons = []
+
+        for num, doc in enumerate(current_items, start=start + 1):
+            _id = doc.get("_id")
+
+            buy_buttons.append(
+                InlineKeyboardButton(
+                    str(num),
                     callback_data=f"buy_id_{_id}"
                 )
             )
 
-        if selection_row:
-            buttons.append(selection_row)
+        if buy_buttons:
+            buttons.append(buy_buttons)
 
-        nav_row = []
+        nav = []
 
         if page > 0:
-            nav_row.append(
+            nav.append(
                 InlineKeyboardButton(
-                    "<×",
-                    callback_data=f"list_nokos_{page - 1}"
+                    "⬅️",
+                    callback_data=f"list_nokos_{page - 1}_{category_id or 'all'}"
                 )
             )
 
-        nav_row.append(
+        nav.append(
             InlineKeyboardButton(
-                "Back",
+                "🏠 Beranda",
                 callback_data="open_nokos"
             )
         )
 
         if page < max_pages - 1:
-            nav_row.append(
+            nav.append(
                 InlineKeyboardButton(
-                    "×>",
-                    callback_data=f"list_nokos_{page + 1}"
+                    "➡️",
+                    callback_data=f"list_nokos_{page + 1}_{category_id or 'all'}"
                 )
             )
 
-        if nav_row:
-            buttons.append(nav_row)
+        buttons.append(nav)
 
         return text, InlineKeyboardMarkup(buttons)
