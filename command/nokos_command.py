@@ -5,7 +5,8 @@ from helpers.buttons import ButtonUtils
 
 
 async def cb_shop(_, callback: CallbackQuery):
-    text, button = await ButtonUtils.nokos(0)
+    category_id = callback.data.split()
+    text, button = await ButtonUtils.nokos(0, category_id[1])
     return await callback.edit_message_text(
           text, reply_markup=button
     )
