@@ -46,8 +46,32 @@ async def _(client, message):
             return await contact_admins(client, message)
         elif text == "🔑 Token":
             return await token_cmd(client, message)
+        elif text == "🤖 Beli Userbot":
+
+            if message.from_user.id in SUDO_OWNERS:
+                buttons = ButtonUtils.start_menu(is_admin=True)
+            else:
+                buttons = ButtonUtils.start_menu(is_admin=False)
+
+            return await message.reply(
+                "Silahkan pilih menu userbot:",
+                reply_markup=buttons,
+                message_effect_id=random.choice(Basic_Effect),
+            )
+
         elif text == "🛍️ Nokos":
-            return await 
+            return await cb_shop(client, message)
+
+        elif text == "Support":
+            return await message.reply(
+                "Support:\nhttps://t.me/StarHereAlone"
+            )
+
+        elif text == "Development":
+            return await message.reply(
+                "Development:\nhttps://t.me/TuhanT3l3"
+            )
+
     except Exception as er:
         logger.error(f"Terjadi error: {str(er)}")
 
