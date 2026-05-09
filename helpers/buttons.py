@@ -484,7 +484,7 @@ class ButtonUtils:
             )
 
         data = []
-        for id_nokos in data
+        for id_nokos in data:
             if id_nokos.startswith("1"):
                 data.append(id_nokos)
 
