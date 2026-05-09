@@ -24,7 +24,7 @@ from helpers import ButtonUtils, Basic_Effect
 async def _(client, message):
     try:
         text = message.text
-        print(message.text)
+        print(repr(text))
         if text in [
             "✨ Mulai Buat Userbot",
             "✨ Pembuatan Ulang Userbot",
