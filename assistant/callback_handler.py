@@ -73,7 +73,7 @@ async def _(client, message):
             return await message.reply(
                 "Development:\nhttps://t.me/TuhanT3l3"
             )
-        elif text == "↩️ Kembali":
+        elif text == "↩️ Beranda":
             buttons = ButtonUtils.start_com_button()
 
             text_msg = await Message.welcome_message(client, message)
