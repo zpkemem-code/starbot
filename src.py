@@ -3,7 +3,8 @@ import asyncio
 from aiorun import run, shutdown_waits_for
 from pyrogram.errors import (AuthKeyDuplicated, AuthKeyUnregistered,
                              SessionRevoked, UserAlreadyParticipant,
-                             UserDeactivated, UserDeactivatedBan)
+                             UserDeactivated, UserDeactivatedBan,
+                             FloodWait)
 
 from clients import UserBot, bot, star
 from config import (BLACKLIST_KATA, LOG_SELLER, OWNER_ID, WAJIB_JOIN,
@@ -85,15 +86,42 @@ async def start_ubot(ubot):
 
 async def start_main_bot():
     """Start the main bot after userbots."""
+
     logger.info("🤖 Starting main bot...")
-    await bot.start()
+
+    while True:
+        try:
+            await bot.start()
+            break
+
+        except FloodWait as e:
+            logger.warning(
+                f"FloodWait detected, waiting {e.value} seconds..."
+            )
+            await asyncio.sleep(e.value)
+
+        except Exception as er:
+            logger.error(f"Failed start main bot: {er}")
+            await asyncio.sleep(10)
+
     await bot.add_reseller()
+
     logger.info("✅ Main bot started successfully.")
+
     total_bots = len(star._ubot)
-    message = "🔥**Bot berhasil diaktifkan**🔥\n" f"✅ **Total User: {total_bots}**"
+
+    message = (
+        "🔥**Bot berhasil diaktifkan**🔥\n"
+        f"✅ **Total User: {total_bots}**"
+    )
+
     await dB.set_var(bot.id, "total_users", total_bots)
+
     try:
-        await bot.send_message(OWNER_ID, f"<blockquote>{message}</blockquote>")
+        await bot.send_message(
+            OWNER_ID,
+            f"<blockquote>{message}</blockquote>",
+        )
     except Exception:
         pass
 
