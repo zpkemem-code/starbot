@@ -280,3 +280,23 @@ async def back_home(client, callback):
         reply_markup=buttons,
         disable_web_page_preview=True,
     )
+
+async def back_awal(client, callback):
+    await callback.message.delete()
+
+    broadcast = await dB.get_list_from_var(client.me.id, "BROADCAST")
+    user = callback.from_user
+
+    if user.id not in broadcast:
+        await dB.add_to_var(client.me.id, "BROADCAST", user.id)
+
+    buttons = ButtonUtils.start_com_button()
+
+    text = await Message.welcome_message(client, callback.message)
+
+    return await client.send_message(
+        user.id,
+        text=text,
+        reply_markup=buttons,
+        disable_web_page_preview=True,
+    )
