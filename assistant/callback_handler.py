@@ -62,7 +62,7 @@ async def _(client, message):
             )
 
         elif text == "🛍️ Nokos":
-            return await cb_shop(client, message)
+            return await open_nokos(client, message)
 
         elif text == "Support":
             return await message.reply(
