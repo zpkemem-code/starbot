@@ -13,44 +13,34 @@ async def cb_shop(_, callback: CallbackQuery):
 
 
 async def cb_page_shop(_, callback: CallbackQuery):
-    page = int(callback.matches[0].group(1))
-    text, button = await ButtonUtils.nokos(page)
+    data = callback.data.split("_")
+
+    page = int(data[2])
+    category_id = data[3]
+
+    if category_id == "all":
+        category_id = None
+
+    text, button = await ButtonUtils.nokos(page, category_id)
+
     return await callback.edit_message_text(
-          text, reply_markup=button
-    ) 
-
-
-async def open_nokos(client, message):
-    buttons = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    "id 1",
-                    callback_data="shop 1"
-                )
-            ]
-        ]
+        text,
+        reply_markup=button
     )
 
+async def open_nokos(client, message):
+    text, button = await ButtonUtils.nokos()
+
     return await message.reply(
-        "Silahkan pilih menu Nokos:",
-        reply_markup=buttons,
+        text,
+        reply_markup=button,
     )
 
 
 async def open_nokos_cb(_, callback: CallbackQuery):
-    buttons = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    "id 1",
-                    callback_data="shop 1"
-                )
-            ]
-        ]
-    )
+    text, button = await ButtonUtils.nokos()
 
     return await callback.edit_message_text(
-        "Silahkan pilih menu Nokos:",
-        reply_markup=buttons,
+        text,
+        reply_markup=button,
     )
