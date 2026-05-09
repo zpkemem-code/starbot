@@ -84,6 +84,9 @@ async def _(client, message):
         elif text == "↩️ Beranda":
             buttons = ButtonUtils.start_com_button()
 
+        elif text == "🏠 Beranda":
+            buttons = ButtonUtils.start_com_button()
+
             text_msg = await Message.welcome_message(client, message)
 
             return await message.reply(
