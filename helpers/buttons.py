@@ -247,12 +247,12 @@ class ButtonUtils:
     def start_com_button() -> kb:
         buttons = [
             [
-                kb("🤖 Beli Userbot"),
-                kb("🛍️ Nokos"),
+                "🤖 Beli Userbot",
+                "🛍️ Nokos",
             ],
             [
-                kb("Support"),
-                kb("Development"),
+                "Support",
+                "Development",
             ],
         ]
 
