@@ -16,6 +16,7 @@ from command import (an1cb, back_home, bola_date, bola_matches,
                      user_aggre, viewchord, viewgempa, drakorcb, cb_page_shop, cb_shop, open_nokos, open_nokos_cb)
 from helpers import CMD, trigger, Message
 from logs import logger
+from pyrogram.helpers import ikb, kb
 from config import SUDO_OWNERS
 from helpers import ButtonUtils, Basic_Effect
 
