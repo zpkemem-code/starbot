@@ -244,6 +244,25 @@ class ButtonUtils:
         return kb(common_buttons, resize_keyboard=True, one_time_keyboard=True)
 
     @staticmethod
+    def start_com_button() -> kb:
+        buttons = [
+            [
+                KeyboardButton("🤖 Beli Userbot"),
+                KeyboardButton("🛍️ Nokos"),
+            ],
+            [
+                KeyboardButton("Support"),
+                KeyboardButton("Development"),
+            ],
+        ]
+
+        return kb(
+            buttons,
+            resize_keyboard=True,
+            one_time_keyboard=False,
+        )
+
+    @staticmethod
     def userbot(user_id, count):
         button = ikb(
             [
