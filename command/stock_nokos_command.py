@@ -1,15 +1,18 @@
 import traceback
 
+from config import SUDO_OWNERS
 from database import db
-from config import OWNER_ID
 from logs import logger
 
 
-async def restock_nokos_cmd(client, message):
-    user_id = message.from_user.id
+def sudo_only(message):
+    user = message.from_user or message.sender_chat
+    return user and user.id in SUDO_OWNERS
 
-    if user_id != OWNER_ID:
-        return await message.reply("<b>❌ Khusus owner.</b>")
+
+async def restock_nokos_cmd(client, message):
+    if not sudo_only(message):
+        return await message.reply("<b>❌ Perintah ini khusus SUDO OWNERS.</b>")
 
     try:
         args = message.text.split(maxsplit=1)
@@ -17,16 +20,15 @@ async def restock_nokos_cmd(client, message):
         if len(args) < 2:
             return await message.reply(
                 """
-<b>Format salah.</b>
+<b>Format restock:</b>
 
-Gunakan:
-<code>.restock id|harga|nomor|otp|2fa|session</code>
+<code>/restock id|harga|nomor|otp|2fa|session</code>
 
-Contoh:
-<code>.restock 123456|15000|628xxxx|12345|password2fa|SESSION_STRING</code>
+<b>Contoh:</b>
+<code>/restock 123456|15000|628123456789|12345|password2fa|SESSION_STRING</code>
 
-Kalau tidak ada 2FA:
-<code>.restock 123456|15000|628xxxx|12345|-|SESSION_STRING</code>
+<b>Jika tidak ada 2FA:</b>
+<code>/restock 123456|15000|628123456789|12345|-|SESSION_STRING</code>
 """
             )
 
@@ -34,8 +36,8 @@ Kalau tidak ada 2FA:
 
         if len(data) < 6:
             return await message.reply(
-                "<b>❌ Data kurang. Format harus:</b>\n"
-                "<code>.restock id|harga|nomor|otp|2fa|session</code>"
+                "<b>❌ Format salah.</b>\n\n"
+                "<code>/restock id|harga|nomor|otp|2fa|session</code>"
             )
 
         nokos_id = int(data[0].strip())
@@ -59,7 +61,7 @@ Kalau tidak ada 2FA:
 
         return await message.reply(
             f"""
-<b>✅ Stok berhasil ditambahkan.</b>
+<b>✅ Stok nokos berhasil ditambahkan.</b>
 
 <blockquote>
 🆔 ID: <code>{nokos_id}</code>
@@ -77,17 +79,15 @@ Kalau tidak ada 2FA:
 
 
 async def delstock_nokos_cmd(client, message):
-    user_id = message.from_user.id
-
-    if user_id != OWNER_ID:
-        return await message.reply("<b>❌ Khusus owner.</b>")
+    if not sudo_only(message):
+        return await message.reply("<b>❌ Perintah ini khusus SUDO OWNERS.</b>")
 
     try:
         args = message.text.split(maxsplit=1)
 
         if len(args) < 2:
             return await message.reply(
-                "<b>Format:</b>\n<code>.delstock id</code>"
+                "<b>Format:</b>\n<code>/delstock id</code>"
             )
 
         nokos_id = int(args[1].strip())
@@ -99,7 +99,8 @@ async def delstock_nokos_cmd(client, message):
         await db.delete_nokos(nokos_id)
 
         return await message.reply(
-            f"<b>✅ Stok berhasil dihapus.</b>\n\n🆔 ID: <code>{nokos_id}</code>"
+            f"<b>✅ Stok berhasil dihapus.</b>\n\n"
+            f"🆔 ID: <code>{nokos_id}</code>"
         )
 
     except Exception:
@@ -108,10 +109,8 @@ async def delstock_nokos_cmd(client, message):
 
 
 async def getstock_nokos_cmd(client, message):
-    user_id = message.from_user.id
-
-    if user_id != OWNER_ID:
-        return await message.reply("<b>❌ Khusus owner.</b>")
+    if not sudo_only(message):
+        return await message.reply("<b>❌ Perintah ini khusus SUDO OWNERS.</b>")
 
     try:
         stok = await db.get_nokos()
