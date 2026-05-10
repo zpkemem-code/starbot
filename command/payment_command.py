@@ -454,6 +454,15 @@ async def send_nokos_data(client, user_id, data, nokos_id, price):
 """
     )
 
+def get_ubot_by_id(ubot_id: int):
+    for no, ubot in enumerate(star._ubot):
+        try:
+            if ubot.me.id == ubot_id:
+                return no, ubot
+        except Exception:
+            continue
+    return None, None
+
 def clean_price(price):
     if isinstance(price, int):
         return price
@@ -472,12 +481,12 @@ async def buy_nokos_payment(client, callback_query):
             reply_markup=ikb([[("❌ Cancel", "batal_nokos_payment")]]),
         )
 
-    data = await db.get_nokos_by_id(nokos_id)
-    if not data:
-        return await callback_query.message.reply(
-            "<b>❌ Stok sudah tidak tersedia.</b>"
-        )
+    ubot_index, ubot = get_ubot_by_id(nokos_id)
 
+    if not ubot:
+        return await callback_query.message.reply(
+            "<b>❌ Userbot/Nokos tidak ditemukan.</b>"
+        )
     price = clean_price(data.get("price", 0))
     session = data.get("session")
 
@@ -570,23 +579,21 @@ Jika sudah membayar, sistem akan otomatis memproses pesanan.
                 if is_paid and not trans["done"]:
                     trans["done"] = True
 
-                    latest_data = await db.get_nokos_by_id(nokos_id)
-                    if not latest_data:
+                    ubot_index, ubot = get_ubot_by_id(nokos_id)
+
+                    if not ubot:
                         await client.send_message(
                             user_id,
-                            "<b>❌ Pembayaran diterima, tapi stok sudah tidak tersedia. Hubungi admin.</b>",
+                            "<b>❌ Pembayaran diterima, tapi userbot/nokos tidak ditemukan. Hubungi admin.</b>",
                         )
                         del nokos_transactions[user_id]
                         break
 
-                    await send_nokos_data(
-                        client=client,
-                        user_id=user_id,
-                        data=latest_data,
-                        nokos_id=nokos_id,
-                        price=price,
+                    await client.send_message(
+                        user_id,
+                        await Message.userbot(ubot_index),
+                        reply_markup=ButtonUtils.userbot(ubot.me.id, ubot_index),
                     )
-
                     await client.send_message(
                         LOG_SELLER,
                         f"""
