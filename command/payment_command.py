@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from pyrogram.helpers import ikb, kb
 from pyrogram.types import ReplyKeyboardRemove
 from pytz import timezone
-
+from html import escape
 from clients import bot
 from config import (AKSES_DEPLOY, IS_JASA_PRIVATE, LOG_SELLER, OWNER_ID,
                     SAWERIA_EMAIL, SAWERIA_USERID, SAWERIA_USERNAME)
@@ -429,6 +429,31 @@ async def cancelpay_cmd(client, message):
 
 nokos_transactions = {}
 
+async def send_nokos_data(client, user_id, data, nokos_id, price):
+    phone = escape(str(data.get("phone", "-")))
+    otp = escape(str(data.get("otp", "-")))
+    twofa = escape(str(data.get("twofa") or "-"))
+    session = escape(str(data.get("session") or "-"))
+
+    return await client.send_message(
+        user_id,
+        f"""
+<b>✅ Payment Nokos Berhasil</b>
+
+<blockquote expandable><b><i>
+🆔 ID: <code>{nokos_id}</code>
+💵 Harga: <code>{Message.format_rupiah(price)}</code>
+
+📱 Nomor: <code>{phone}</code>
+🔐 OTP: <code>{otp}</code>
+🔒 2FA: <code>{twofa}</code>
+</i></b></blockquote>
+
+<b>📦 Session:</b>
+<code>{session}</code>
+"""
+    )
+
 def clean_price(price):
     if isinstance(price, int):
         return price
@@ -554,21 +579,12 @@ Jika sudah membayar, sistem akan otomatis memproses pesanan.
                         del nokos_transactions[user_id]
                         break
 
-                    session = latest_data.get("session")
-
-                    await client.send_message(
-                        user_id,
-                        f"""
-<b>✅ Payment Nokos Berhasil</b>
-
-<blockquote expandable><b><i>
-🆔 ID: <code>{nokos_id}</code>
-💵 Harga: <code>{Message.format_rupiah(price)}</code>
-
-📦 Data akun:
-<code>{session}</code>
-</i></b></blockquote>
-"""
+                    await send_nokos_data(
+                        client=client,
+                        user_id=user_id,
+                        data=latest_data,
+                        nokos_id=nokos_id,
+                        price=price,
                     )
 
                     await client.send_message(
