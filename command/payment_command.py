@@ -429,30 +429,6 @@ async def cancelpay_cmd(client, message):
 
 nokos_transactions = {}
 
-async def send_nokos_data(client, user_id, data, nokos_id, price):
-    phone = escape(str(data.get("phone", "-")))
-    otp = escape(str(data.get("otp", "-")))
-    twofa = escape(str(data.get("twofa") or "-"))
-    session = escape(str(data.get("session") or "-"))
-
-    return await client.send_message(
-        user_id,
-        f"""
-<b>✅ Payment Nokos Berhasil</b>
-
-<blockquote expandable><b><i>
-🆔 ID: <code>{nokos_id}</code>
-💵 Harga: <code>{Message.format_rupiah(price)}</code>
-
-📱 Nomor: <code>{phone}</code>
-🔐 OTP: <code>{otp}</code>
-🔒 2FA: <code>{twofa}</code>
-</i></b></blockquote>
-
-<b>📦 Session:</b>
-<code>{session}</code>
-"""
-    )
 
 def get_ubot_by_id(ubot_id: int):
     for no, ubot in enumerate(star._ubot):
@@ -462,6 +438,7 @@ def get_ubot_by_id(ubot_id: int):
         except Exception:
             continue
     return None, None
+
 
 def clean_price(price):
     if isinstance(price, int):
@@ -481,18 +458,23 @@ async def buy_nokos_payment(client, callback_query):
             reply_markup=ikb([[("❌ Cancel", "batal_nokos_payment")]]),
         )
 
-    ubot_index, ubot = get_ubot_by_id(nokos_id)
-
-    if not ubot:
+    data = await db.get_nokos_by_id(nokos_id)
+    if not data:
         return await callback_query.message.reply(
-            "<b>❌ Userbot/Nokos tidak ditemukan.</b>"
+            "<b>❌ Data harga nokos tidak ditemukan.</b>"
         )
+
     price = clean_price(data.get("price", 0))
-    session = data.get("session")
 
     if price <= 0:
         return await callback_query.message.reply(
             "<b>❌ Harga data tidak valid.</b>"
+        )
+
+    ubot_index, ubot = get_ubot_by_id(nokos_id)
+    if not ubot:
+        return await callback_query.message.reply(
+            "<b>❌ Userbot/Nokos tidak ditemukan.</b>"
         )
 
     try:
@@ -500,7 +482,7 @@ async def buy_nokos_payment(client, callback_query):
 
         loading = await client.send_message(
             user_id,
-            "<b><i>⏳ Generating QR Code...</i></b>"
+            "<b><i>⏳ Generating QR Code...</i></b>",
         )
 
         output_path = f"storage/cache/nokos_{user_id}.png"
@@ -522,7 +504,7 @@ async def buy_nokos_payment(client, callback_query):
             caption=f"""
 <b>📃「 Waiting Payment Nokos 」</b>
 
-<blockquote expandable><b><i>
+<blockquote><b><i>
 📦 Item: Akun Telegram Nokos
 🆔 ID: <code>{nokos_id}</code>
 💵 Harga: <code>{Message.format_rupiah(price)}</code>
@@ -579,8 +561,16 @@ Jika sudah membayar, sistem akan otomatis memproses pesanan.
                 if is_paid and not trans["done"]:
                     trans["done"] = True
 
-                    ubot_index, ubot = get_ubot_by_id(nokos_id)
+                    latest_data = await db.get_nokos_by_id(nokos_id)
+                    if not latest_data:
+                        await client.send_message(
+                            user_id,
+                            "<b>❌ Pembayaran diterima, tapi data harga nokos sudah tidak tersedia. Hubungi admin.</b>",
+                        )
+                        del nokos_transactions[user_id]
+                        break
 
+                    ubot_index, ubot = get_ubot_by_id(nokos_id)
                     if not ubot:
                         await client.send_message(
                             user_id,
@@ -591,21 +581,30 @@ Jika sudah membayar, sistem akan otomatis memproses pesanan.
 
                     await client.send_message(
                         user_id,
-                        await Message.userbot(ubot_index),
-                        reply_markup=ButtonUtils.userbot(ubot.me.id, ubot_index),
+                        "<b>✅ Payment Nokos Berhasil</b>",
                     )
+
+                    await client.send_message(
+                        user_id,
+                        await Message.userbot(ubot_index),
+                        reply_markup=ButtonUtils.userbot(
+                            ubot.me.id,
+                            ubot_index,
+                        ),
+                    )
+
                     await client.send_message(
                         LOG_SELLER,
                         f"""
 <b>🛒「 Nokos Terjual 」</b>
 
-<blockquote expandable><b><i>
+<blockquote><b><i>
 👤 User: <code>{callback_query.from_user.first_name}</code>
 🆔 User ID: <code>{user_id}</code>
 📦 Nokos ID: <code>{nokos_id}</code>
 💵 Harga: <code>{Message.format_rupiah(price)}</code>
 </i></b></blockquote>
-"""
+""",
                     )
 
                     try:
@@ -630,8 +629,10 @@ Jika sudah membayar, sistem akan otomatis memproses pesanan.
             "<b>Terjadi error saat membuat payment nokos.</b>",
         )
 
+
 async def cancel_nokos_payment(client, callback_query):
     await callback_query.answer()
+
     user_id = callback_query.from_user.id
 
     if user_id not in nokos_transactions:
