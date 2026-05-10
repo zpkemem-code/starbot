@@ -4,6 +4,7 @@ from command import from (
     delstock_nokos_cmd,
     getstock_nokos_cmd,
 )
+from clients import star
 
 
 @CMD.BOT("restock")
