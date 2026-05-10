@@ -13,7 +13,7 @@ from command import (an1cb, back_home, bola_date, bola_matches,
                      refresh_cat, reset_costum_text, reset_emoji, reset_prefix,
                      rest_anime, rest_comic, rest_donghua, restart_userbot,
                      selected_topic, token_cmd, tools_token, tools_userbot,
-                     user_aggre, viewchord, viewgempa, drakorcb, cb_page_shop, cb_shop, open_nokos, open_nokos_cb, buy_nokos_payment)
+                     user_aggre, viewchord, viewgempa, drakorcb, cb_page_shop, cb_shop, open_nokos, open_nokos_cb, buy_nokos_payment, cancel_nokos_payment)
 from helpers import CMD, trigger, Message
 from logs import logger
 from pyrogram.helpers import ikb, kb
