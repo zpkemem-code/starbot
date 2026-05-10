@@ -39,7 +39,7 @@ async def restock_nokos_cmd(client, message):
     if cek_nokos:
         return await message.reply(
             f"<b>Pengguna dengan ID:</b> <code>{get_id}</code> "
-            f"<b>sudah memiliki akses nokos!</b>"
+            f"<b>sudah memiliki akses stock nokos!</b>"
         )
 
     await db.add_nokos(
@@ -52,7 +52,7 @@ async def restock_nokos_cmd(client, message):
     )
 
     await message.reply(
-        f"✅ <b>Akses nokos diberikan kepada</b> <code>{get_id}</code>\n"
+        f"✅ <b>stock nokos diberikan kepada</b> <code>{get_id}</code>\n"
         f"<b>Harga:</b> <code>{harga}</code>\n\n"
         f"<b>Silahkan pergi ke @{bot.me.username}</b>"
     )
@@ -79,7 +79,7 @@ async def restock_nokos_cmd(client, message):
     try:
         return await bot.send_message(
             get_id,
-            f"<b>Selamat! Akun anda sudah memiliki akses untuk pembuatan Nokos.</b>\n\n"
+            f"<b>Selamat! Akun anda sudah memiliki akses untuk pembuatan stock Nokos.</b>\n\n"
             f"<b>Harga:</b> <code>{harga}</code>",
             reply_markup=kb(
                 [["✅ Restock Nokos"]],
