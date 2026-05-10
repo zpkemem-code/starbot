@@ -425,3 +425,185 @@ async def cancelpay_cmd(client, message):
         return await message.reply(
             f"{em.warn}**There is no active transaction to cancel.**"
         )
+
+
+nokos_transactions = {}
+
+
+def clean_price(price):
+    if isinstance(price, int):
+        return price
+    return int(str(price).replace(".", "").replace(",", "").strip())
+
+
+async def buy_nokos_payment(client, callback_query):
+    await callback_query.answer()
+
+    user_id = callback_query.from_user.id
+    nokos_id = int(callback_query.data.replace("buy_id_", ""))
+
+    if user_id in nokos_transactions:
+        return await callback_query.message.reply(
+            "**__📑 Kamu masih punya transaksi nokos yang aktif.__**",
+            reply_markup=ikb([[("❌ Cancel", "batal_nokos_payment")]]),
+        )
+
+    data = await db.get_nokos_by_id(nokos_id)
+    if not data:
+        return await callback_query.message.reply(
+            "<b>❌ Stok sudah tidak tersedia.</b>"
+        )
+
+    price = clean_price(data.get("price", 0))
+    session = data.get("session")
+
+    if price <= 0:
+        return await callback_query.message.reply(
+            "<b>❌ Harga data tidak valid.</b>"
+        )
+
+    try:
+        await callback_query.message.delete()
+
+        loading = await client.send_message(
+            user_id,
+            "<b><i>⏳ Generating QR Code...</i></b>"
+        )
+
+        output_path = f"storage/cache/nokos_{user_id}.png"
+
+        qrstring, payment_id, qris_path = await Saweria.create_payment_qr(
+            SAWERIA_USERID,
+            SAWERIA_USERNAME,
+            price,
+            SAWERIA_EMAIL,
+            output_path,
+        )
+
+        hasil_amount = Saweria.get_amount(qrstring)
+        expired_time = datetime.now() + timedelta(minutes=3)
+
+        sent_msg = await client.send_photo(
+            user_id,
+            qris_path,
+            caption=f"""
+<b>📃「 Waiting Payment Nokos 」</b>
+
+<blockquote expandable><b><i>
+📦 Item: Akun Telegram Nokos
+🆔 ID: <code>{nokos_id}</code>
+💵 Harga: <code>{Message.format_rupiah(price)}</code>
+💰 Total Payment: <code>{Message.format_rupiah(hasil_amount)}</code>
+⏰ Expired: <code>{expired_time}</code>
+
+Silakan scan QRIS di atas.
+Jika sudah membayar, sistem akan otomatis memproses pesanan.
+</i></b></blockquote>
+""",
+            reply_markup=ikb([[("❌ Cancel", "batal_nokos_payment")]]),
+        )
+
+        await loading.delete()
+
+        if os.path.exists(qris_path):
+            os.remove(qris_path)
+
+        nokos_transactions[user_id] = {
+            "nokos_id": nokos_id,
+            "payment_id": payment_id,
+            "expire_time": expired_time,
+            "message_id": sent_msg.id,
+            "done": False,
+        }
+
+        while True:
+            await asyncio.sleep(1)
+
+            trans = nokos_transactions.get(user_id)
+            if not trans or trans["done"]:
+                break
+
+            if datetime.now() > trans["expire_time"]:
+                await client.send_message(
+                    user_id,
+                    "<b><i>❌ Payment nokos dibatalkan karena timeout.</i></b>",
+                )
+
+                try:
+                    await client.delete_messages(
+                        chat_id=user_id,
+                        message_ids=trans["message_id"],
+                    )
+                except Exception:
+                    pass
+
+                del nokos_transactions[user_id]
+                break
+
+            try:
+                is_paid = await Saweria.check_paid_status(payment_id)
+
+                if is_paid and not trans["done"]:
+                    trans["done"] = True
+
+                    latest_data = await db.get_nokos_by_id(nokos_id)
+                    if not latest_data:
+                        await client.send_message(
+                            user_id,
+                            "<b>❌ Pembayaran diterima, tapi stok sudah tidak tersedia. Hubungi admin.</b>",
+                        )
+                        del nokos_transactions[user_id]
+                        break
+
+                    session = latest_data.get("session")
+
+                    await client.send_message(
+                        user_id,
+                        f"""
+<b>✅ Payment Nokos Berhasil</b>
+
+<blockquote expandable><b><i>
+🆔 ID: <code>{nokos_id}</code>
+💵 Harga: <code>{Message.format_rupiah(price)}</code>
+
+📦 Data akun:
+<code>{session}</code>
+</i></b></blockquote>
+"""
+                    )
+
+                    await client.send_message(
+                        LOG_SELLER,
+                        f"""
+<b>🛒「 Nokos Terjual 」</b>
+
+<blockquote expandable><b><i>
+👤 User: <code>{callback_query.from_user.first_name}</code>
+🆔 User ID: <code>{user_id}</code>
+📦 Nokos ID: <code>{nokos_id}</code>
+💵 Harga: <code>{Message.format_rupiah(price)}</code>
+</i></b></blockquote>
+"""
+                    )
+
+                    try:
+                        await client.delete_messages(
+                            chat_id=user_id,
+                            message_ids=trans["message_id"],
+                        )
+                    except Exception:
+                        pass
+
+                    await db.delete_nokos(nokos_id)
+                    del nokos_transactions[user_id]
+                    break
+
+            except Exception as e:
+                print(f"Error checking nokos payment: {e}")
+
+    except Exception:
+        logger.error(f"ERROR NOKOS PAYMENT: {traceback.format_exc()}")
+        return await client.send_message(
+            user_id,
+            "<b>Terjadi error saat membuat payment nokos.</b>",
+        )
