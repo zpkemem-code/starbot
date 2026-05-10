@@ -25,6 +25,7 @@ no_commands = [
     "🎟️ Referral",
     "❌ Batalkan",
     "✨ Mulai Buat Userbot",
+    "✅ Restock Nokos",
     "❓ Status Akun",
     "🔄 Reset Emoji",
     "🔄 Reset Prefix",
