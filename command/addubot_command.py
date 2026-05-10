@@ -254,7 +254,7 @@ async def create_userbots(client, message):
         expir = exp.astimezone(timezone("Asia/Jakarta")).strftime("%Y-%m-%d %H:%M")
         text_done = f"""
 <blockquote expandable><b>🔥 {bot.me.mention} Berhasil Di Aktifkan
-➡️ Akun: <a href=tg://openmessage?user_id={star_client.me.id}>{star_client.me.first_name} {kn_client.me.last_name or ''}</a>
+➡️ Akun: <a href=tg://openmessage?user_id={star_client.me.id}>{star_client.me.first_name} {star_client.me.last_name or ''}</a>
 ➡️ ID: <code>{star_client.me.id}</code>
 ➡️ Plan: <b>{PLAN}</b>
 ➡️ Prefixes: {' '.join(prefix)}
