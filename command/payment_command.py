@@ -429,7 +429,6 @@ async def cancelpay_cmd(client, message):
 
 nokos_transactions = {}
 
-
 def clean_price(price):
     if isinstance(price, int):
         return price
