@@ -30,6 +30,7 @@ async def _(client, message):
             "✨ Mulai Buat Userbot",
             "✨ Pembuatan Ulang Userbot",
             "✅ Lanjutkan Buat Userbot",
+            "✅ Lanjutkan Stock Nokos",
         ]:
             return await mari_buat_userbot(client, message)
         elif text in ["💎 Plan Pro", "🧩 Plan Basic", "⚡ Plan Lite"]:
