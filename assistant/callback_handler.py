@@ -320,5 +320,7 @@ async def _(client, callback):
             return await cb_shop(client, callback)
         elif query.startswith("buy_id_"):
             return await buy_nokos_payment(client, callback)
+        elif query == "batal_nokos_payment":
+            return await cancel_nokos_payment(client, callback)
     except Exception:
         logger.error(f"Callback error: {traceback.format_exc()}")
