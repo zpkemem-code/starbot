@@ -130,6 +130,12 @@ from .vctools_command import (joinos_cmd, joinvc_cmd, leavevc_cmd, listner_cmd,
                               vctitle_cmd)
 from .ceklahir_command import ceklahir_cmd
 
+from .stock_nokos_command import (
+    restock_nokos_cmd,
+    delstock_nokos_cmd,
+    getstock_nokos_cmd,
+)
+
 from .cekjembut_command import cekjembut_cmd
 
 from .cekilmu_command import cekilmu_cmd
