@@ -139,6 +139,17 @@ async def send_ubot_1(client, message):
     )
 
 
+async def send_nokos(client, message):
+    user = message.from_user if message.from_user else message.sender_chat
+    if user.id not in config.STARX:
+        return
+
+    return await client.send_message(
+        message.from_user.id,
+        await Message.nokos(),
+    )
+
+
 async def send_ubot_2(client, message):
     user = message.from_user if message.from_user else message.sender_chat
     if user.id not in config.SUDO_OWNERS:
