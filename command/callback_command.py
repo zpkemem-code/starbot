@@ -496,33 +496,81 @@ async def tools_userbot(_, callback_query):
             reply_markup=(ButtonUtils.userbot(X.me.id, int(query[1]))),
         )
 
-async def tools_nokos(client, message):
-    user_id = message.from_user.id
+
+async def tools_nokos(_, callback_query):
+    await callback_query.answer()
+    user_id = callback_query.from_user.id
+    query = callback_query.data.split()
 
     if user_id not in SUDO_OWNERS:
-        return await message.reply(
-            f"<b>GAUSAH REWEL YA ANJING! {message.from_user.first_name} {message.from_user.last_name or ''}</b>"
+        return await callback_query.answer(
+            f"<b>GAUSAH REWEL YA ANJING! {callback_query.from_user.first_name} {callback_query.from_user.last_name or ''}",
+            True,
         )
 
-    data_nokos = await db.get_nokos()
+    X = star.nokos[int(query[1])]
 
-    if not data_nokos:
-        return await message.reply("<b>❌ Data nokos kosong.</b>")
+    if query[0] == "get_otp":
+        async for otp in X.search_messages(777000, limit=1):
+            try:
+                if not otp.text:
+                    await callback_query.answer("❌ Kode tidak ditemukan", True)
+                else:
+                    await callback_query.edit_message_text(
+                        otp.text,
+                        reply_markup=(ButtonUtils.user_nokos(X.me.id, int(query[1]))),
+                    )
+                    return await X.delete_messages(X.me.id, otp.id)
+            except Exception as error:
+                return await callback_query.answer(error, True)
 
-    text = "<b>📋 LIST NOKOS</b>\n\n"
+    elif query[0] == "get_phone":
+        try:
+            return await callback_query.edit_message_text(
+                f"<b>📲 Nomer telepon <code>{X.me.id}</code> adalah <code>{X.me.phone_number}</code></b>",
+                reply_markup=(ButtonUtils.user_nokos(X.me.id, int(query[1]))),
+            )
+        except Exception as error:
+            return await callback_query.answer(error, True)
 
-    for count, data in enumerate(data_nokos, start=1):
-        phone = data.get("phone", "-")
-        otp = data.get("otp", "-")
-        twofa = data.get("twofa", "-")
+    elif query[0] == "get_faktor":
+        code = await dB.get_var(X.me.id, "PASSWORD")
+        if code == None:
+            return await callback_query.answer(
+                "🔐 Kode verifikasi 2 langkah tidak ditemukan", True
+            )
+        else:
+            return await callback_query.edit_message_text(
+                f"<b>🔐 Kode verifikasi 2 langkah pengguna <code>{X.me.id}</code> adalah : <code>{code}</code></b>",
+                reply_markup=(ButtonUtils.user_nokos(X.me.id, int(query[1]))),
+            )
 
-        text += (
-            f"{count}. nomor : <code>{phone}</code>, "
-            f"otp : <code>{otp}</code>, "
-            f"v2l : <code>{twofa}</code>\n"
+    elif query[0] == "prev_ub":
+        count = int(query[1]) - 1
+        if count < 0:
+            count = len(star._nokos) - 1
+
+        X = star._nokos[count]
+
+        return await callback_query.edit_message_text(
+            await Message.userbot(count),
+            reply_markup=(ButtonUtils.user_nokos(X.me.id, count)),
         )
 
-    return await message.reply(text)
+    elif query[0] == "next_ub":
+        count = int(query[1]) + 1
+        if count >= len(star._nokos):
+            count = 0
+
+        X = star._nokos[count]
+
+        return await callback_query.edit_message_text(
+            await Message.userbot(count),
+            reply_markup=(ButtonUtils.user_nokos(X.me.id, count)),
+        )
+
+    elif query[0] == "buttonclose":
+        return await callback_query.message.delete()
 
 async def contact_admins(_, message):
     reply_text = (
