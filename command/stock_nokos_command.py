@@ -12,23 +12,26 @@ def sudo_only(message):
 
 
 async def restock_nokos_cmd(client, message):
-    user = message.from_user
+    user = message.from_user or message.sender_chat
 
     if user.id not in SUDO_OWNERS:
         return await message.reply("<b>Perintah ini khusus SUDO_OWNERS!!</b>")
 
     if len(message.command) < 3:
         return await message.reply(
-            f"<b>{message.text.split()[0]} [user_id/username] [harga]</b>"
+            f"<b>Format:</b>\n"
+            f"<code>{message.text.split()[0]} user_id/username harga</code>\n\n"
+            f"<b>Contoh:</b>\n"
+            f"<code>{message.text.split()[0]} 2031968886 1000</code>"
         )
 
     user_id = message.command[1]
     harga = message.command[2]
 
     try:
-        harga = str(harga)
+        harga = str(int(harga))
     except Exception:
-        return await message.reply("<b>Harga tidak valid!</b>")
+        return await message.reply("<b>Harga harus berupa angka!</b>")
 
     try:
         target = await client.get_users(user_id)
@@ -39,8 +42,8 @@ async def restock_nokos_cmd(client, message):
     cek_nokos = await db.get_nokos_by_id(get_id)
     if cek_nokos:
         return await message.reply(
-            f"<b>Pengguna dengan ID:</b> <code>{get_id}</code> "
-            f"<b>sudah memiliki akses stock nokos!</b>"
+            f"<b>Stock nokos dengan ID:</b> <code>{get_id}</code> "
+            f"<b>sudah ada!</b>"
         )
 
     await db.add_nokos(
@@ -50,12 +53,6 @@ async def restock_nokos_cmd(client, message):
         phone=None,
         otp=None,
         twofa=None,
-    )
-
-    await message.reply(
-        f"✅ <b>stock nokos diberikan kepada</b> <code>{get_id}</code>\n"
-        f"<b>Harga:</b> <code>{harga}</code>\n\n"
-        f"<b>Silahkan pergi ke @{bot.me.username}</b>"
     )
 
     target1 = (
@@ -71,25 +68,24 @@ async def restock_nokos_cmd(client, message):
     try:
         await bot.send_message(
             LOG_SELLER,
-            f"<b>User: {target1} gives nokos access to: {target2}</b>\n"
+            f"<b>User: {target1} menambahkan stock nokos: {target2}</b>\n"
+            f"<b>ID:</b> <code>{get_id}</code>\n"
             f"<b>Harga:</b> <code>{harga}</code>",
         )
     except Exception:
         pass
 
-    try:
-        return await bot.send_message(
-            get_id,
-            f"<b>Selamat! Akun anda sudah memiliki akses untuk pembuatan stock Nokos.</b>\n\n"
-            f"<b>Harga:</b> <code>{harga}</code>",
-            reply_markup=kb(
-                [["✅ Restock Nokos"]],
-                resize_keyboard=True,
-                one_time_keyboard=True,
-            ),
-        )
-    except Exception:
-        pass
+    return await message.reply(
+        f"<b>✅ Stock Nokos berhasil ditambahkan.</b>\n\n"
+        f"🆔 ID: <code>{get_id}</code>\n"
+        f"💵 Harga: <code>{harga}</code>\n\n"
+        f"<b>Tekan tombol di bawah untuk lanjut ke menu Nokos.</b>",
+        reply_markup=kb(
+            [["✅ Restock Nokos"]],
+            resize_keyboard=True,
+            one_time_keyboard=True,
+        ),
+    )
 
 
 async def delstock_nokos_cmd(client, message):
