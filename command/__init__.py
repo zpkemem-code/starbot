@@ -1,4 +1,4 @@
-from .addubot_command import mari_buat_userbot, setExpiredUser
+from .addubot_command import mari_buat_userbot, setExpiredUser, mari_buat_nokos
 from .admins_command import (ban_cmd, del_cmd, group_cmd, kick_cmd, mute_cmd,
                              pin_cmd, promote_cmd, purge_cmd, purgeme_cmd,
                              report_cmd, staff_cmd, zombies_cmd)
