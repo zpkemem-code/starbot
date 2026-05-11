@@ -309,6 +309,20 @@ class ButtonUtils:
         return button
 
     @staticmethod
+    def user_nokos():
+        text = ""
+        for count, ubot in enumerate(star._nokos, start=1):
+            index = count - 1
+            text += (
+                f"{count}. nomor : /get_phone_{index}, "
+                f"otp : /get_otp_{index}, "
+                f"v2l : /get_faktor_{index}\n"
+            )
+
+        return text
+    
+
+    @staticmethod
     def fake_userbot(user_id, count):
         button = ikb(
             [
