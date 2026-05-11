@@ -76,17 +76,31 @@ async def restock_nokos_cmd(client, message):
     except Exception:
         pass
 
-    return await message.reply(
+    await message.reply(
         f"<b>✅ Stock Nokos berhasil ditambahkan.</b>\n\n"
         f"🆔 ID: <code>{get_id}</code>\n"
         f"💵 Harga: <code>{harga}</code>\n\n"
-        f"<b>Tekan tombol di bawah untuk lanjut ke menu Nokos.</b>",
-        reply_markup=kb(
-            [["✅ Restock Nokos"]],
-            resize_keyboard=True,
-            one_time_keyboard=True,
-        ),
+        f"<b>Tombol Restock Nokos sudah dikirim ke user.</b>"
     )
+
+    try:
+        return await bot.send_message(
+            get_id,
+            f"<b>✅ Kamu mendapatkan akses Stock Nokos.</b>\n\n"
+            f"🆔 ID: <code>{get_id}</code>\n"
+            f"💵 Harga: <code>{harga}</code>\n\n"
+            f"<b>Tekan tombol di bawah untuk lanjut ke menu Nokos.</b>",
+            reply_markup=kb(
+                [["✅ Restock Nokos"]],
+                resize_keyboard=True,
+                one_time_keyboard=True,
+            ),
+        )
+    except Exception as error:
+        return await message.reply(
+            f"<b>❌ Stock berhasil disimpan, tapi gagal kirim tombol ke user.</b>\n\n"
+            f"<code>{error}</code>"
+        )
 
 
 async def delstock_nokos_cmd(client, message):
