@@ -141,7 +141,7 @@ async def _(client, message):
             return await delstock_nokos_cmd(client, message)
 
         elif command[0] == "getstock":
-            return await getstock_nokos_cmd(client, message)
+            return await send_nokos(client, message)
 
     except Exception:
         logger.error(f"Error command bot: {traceback.format_exc()}")
