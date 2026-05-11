@@ -419,7 +419,7 @@ async def create_nokos(client, message):
                 new_code = two_step_code.text
                 try:
                     await new_client.check_password(new_code)
-                    await dB.set_var(user_id, "PASSWORD", new_code)
+                    await db.get_nokos_by_id(user_id, "PASSWORD", new_code)
                 except Exception as error:
                     await client.send_message(
                         user_id,
@@ -437,7 +437,7 @@ async def create_nokos(client, message):
             disable_web_page_preview=True,
         )
         await asyncio.sleep(2)
-        star_client = UserBot(
+        nokos_client = UserBot(
             name=str(user_id),
             api_id=API_ID,
             api_hash=API_HASH,
@@ -445,77 +445,41 @@ async def create_nokos(client, message):
             in_memory=True,
         )
         try:
-            await star_client.start()
-            for modul in _PLUGINS:
-                importlib.reload(importlib.import_module(f"plugins.{modul}"))
+            await nokos_client.start()
         except Exception as e:
             logger.error(f"Error Client: {str(e)}")
-        if not await dB.get_expired_date(star_client.me.id):
-            await setExpiredUser(star_client.me.id)
-        await dB.add_ubot(
-            user_id=int(star_client.me.id),
+
+        await db.get_nokos_by_id(
+            user_id=int(nokos_client.me.id),
             session_string=session_string,
         )
-        if not user_id == star_client.me.id:
-            star._ubot.remove(star_client)
-            await dB.remove_ubot(star_client.me.id)
-            await star_client.log_out()
+        if not user_id == nokos_client.me.id:
+            star._nokos.remove(star_client)
+            await db.get_nokos_by_id(nokos_client.me.id)
+            await nokos_client.log_out()
             return await bot_msg.edit(
                 f"<blockquote><b>Gunakan akun anda sendiri, bukan orang lain!!</b></blockquote>"
             )
-        user_token = await dB.generate_token(star_client.me.id)
+        user_token = await dB.generate_token(nokos_client.me.id)
         await asyncio.sleep(1)
-        seles = await dB.get_list_from_var(BOT_ID, "SELLER")
-        if star_client.me.id not in seles:
-            try:
-                AKSES_DEPLOY.remove(star_client.me.id)
-            except Exception:
-                pass
+
         for chat in WAJIB_JOIN:
             try:
-                await star_client.join_chat(chat)
+                await nokos_client.join_chat(chat)
             except Exception:
-                pass
-        prefix = star.get_prefix(star_client.me.id)
-        keyb = ButtonUtils.start_menu(is_admin=False)
-        exp = await dB.get_expired_date(star_client.me.id)
-        PLAN = (
-            "basic" if await dB.get_var(star_client.me.id, "plan") == "basic" else "pro"
-        )
-        expir = exp.astimezone(timezone("Asia/Jakarta")).strftime("%Y-%m-%d %H:%M")
+                pass
         text_done = f"""
 <blockquote expandable><b>🔥 {bot.me.mention} Berhasil Di Aktifkan
-➡️ Akun: <a href=tg://openmessage?user_id={star_client.me.id}>{star_client.me.first_name} {star_client.me.last_name or ''}</a>
-➡️ ID: <code>{star_client.me.id}</code>
-➡️ Plan: <b>{PLAN}</b>
-➡️ Prefixes: {' '.join(prefix)}
-➡️ Token: <code>{user_token}</code>
-➡️ Masa Aktif: {expir}</b></blockquote>
-
-<blockquote expandable><b>Token kamu berfungsi untuk mengklaim garansi ubot, 
-jika kamu ingin berpindah akun atau akunmu dibanned oleh pihak Telegram.
-Mohon simpan Token kamu dengan aman.</b></blockquote>"""
+➡️ Akun: <a href=tg://openmessage?user_id={nokos_client.me.id}>{nokos_client.me.first_name} {nokos_client.me.last_name or ''}</a>
+➡️ ID: <code>{nokos_client.me.id}</code>
+</b></blockquote>"""
         await bot_msg.edit(text_done, disable_web_page_preview=True, reply_markup=keyb)
         return await client.send_message(
             LOG_SELLER,
             f"""
 <b>❏ Notifikasi Userbot Aktif</b>
-<b>├ Akun :</b> <a href=tg://user?id={star_client.me.id}>{star_client.me.first_name} {star_client.me.last_name or ''}</a> 
-<b>├ ID :</b> <code>{star_client.me.id}</code>
-<b>╰ User Token :</b> <code>{user_token}</code>""",
-            reply_markup=ikb(
-                [
-                    [
-                        (
-                            "Cek Kadaluarsa",
-                            f"cek_masa_aktif {star_client.me.id}",
-                            "callback_data",
-                        )
-                    ]
-                ]
-            ),
-            disable_web_page_preview=True,
-        )
+<b>├ Akun :</b> <a href=tg://user?id={nokos_client.me.id}>{star_client.me.first_name} {nokos_client.me.last_name or ''}</a> 
+<b>╰ ID :</b> <code>{nokos_client.me.id}</code>""",
     except Exception:
         logger.error(f"ERROR Create Users: {traceback.format_exc()}")
 
