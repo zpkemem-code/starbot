@@ -13,7 +13,7 @@ from pytz import timezone
 from clients import UserBot, bot, star
 from config import (AKSES_DEPLOY, API_HASH, API_ID, BOT_ID, LOG_SELLER,
                     MAX_BOT, SUDO_OWNERS, WAJIB_JOIN)
-from database import dB
+from database import dB, db
 from helpers import ButtonUtils, Message
 from logs import logger
 from plugins import _PLUGINS
