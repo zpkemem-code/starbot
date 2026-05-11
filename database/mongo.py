@@ -5,6 +5,7 @@ from pymongo import AsyncMongoClient
 from config import *
 
 
+
 class MongoDB:
     def __init__(self) -> None:
         self.mongo = AsyncMongoClient(config.MONGO_DB_URI)
@@ -15,7 +16,7 @@ class MongoDB:
         self,
         _id: int = None,
         price: str = None,
-        session: str = "",
+        session: str = None,
         phone: str = None,
         otp: str = None,
         twofa: str = None,
@@ -29,26 +30,36 @@ class MongoDB:
 
         old_data = await self.get_nokos_by_id(nokos_id)
 
-        if price is None and old_data:
-            price = old_data.get("price", "0")
+        update_data = {}
 
-        if price is None:
-            price = "0"
+        if price is not None:
+            update_data["price"] = str(price)
+        elif old_data and old_data.get("price") is not None:
+            update_data["price"] = str(old_data.get("price"))
+        else:
+            update_data["price"] = "0"
 
         if session_string is not None:
-            session = session_string
+            update_data["session"] = session_string
+        elif session is not None:
+            update_data["session"] = session
+        elif old_data and old_data.get("session") is not None:
+            update_data["session"] = old_data.get("session")
+        else:
+            update_data["session"] = ""
+
+        if phone is not None:
+            update_data["phone"] = phone
+
+        if otp is not None:
+            update_data["otp"] = otp
+
+        if twofa is not None:
+            update_data["twofa"] = twofa
 
         return await self.nks.update_one(
             {"_id": int(nokos_id)},
-            {
-                "$set": {
-                    "price": str(price),
-                    "session": session or "",
-                    "phone": phone,
-                    "otp": otp,
-                    "twofa": twofa,
-                }
-            },
+            {"$set": update_data},
             upsert=True,
         )
 
