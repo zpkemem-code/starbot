@@ -87,3 +87,13 @@ async def open_nokos_cb(_, callback: CallbackQuery):
 """
 
     return await callback.edit_message_text(text)
+
+
+
+async def send_nokos_to_buyer(_: Client, callback: CallbackQuery):
+    user = callback.from_user
+
+    
+    
+
+
