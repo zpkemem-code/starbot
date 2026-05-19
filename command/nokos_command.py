@@ -90,8 +90,19 @@ async def open_nokos_cb(_, callback: CallbackQuery):
 
 
 
-async def send_nokos_to_buyer(_: Client, callback: CallbackQuery):
-    user = callback.from_user
+async def login_nokos(_: Client, callback: CallbackQuery):
+    list_nokos = await db.get_nokos()
+
+    nokos_id = callback.data.split()[1]
+
+    for x in list_nokos:
+        if str(x) == str(nokos_id):
+            ph = x.get('phone')
+    
+    await callback.edit_message_text(
+        f"login nokos menggunakan phone number {ph}!\n setelah login baru pencet tombol otp",
+        reply_markup=ikb([[("get otp", f"notp {nokos_id}")]]),
+    )
 
     
     
