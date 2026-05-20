@@ -445,7 +445,8 @@ async def create_nokos(client, message):
             in_memory=True,
         )
         try:
-            await nokos_client.start()
+            await nokos_client.start()
+
         except Exception as e:
             logger.error(f"Error Client: {str(e)}")
 
@@ -491,15 +492,19 @@ async def create_nokos(client, message):
 
         await asyncio.sleep(1)
 
+        await nokos_client.stop() 
+
         for chat in WAJIB_JOIN:
             try:
                 await nokos_client.join_chat(chat)
             except Exception:
-                pass
+                pass
+
         text_done = f"""
 <blockquote expandable><b>🔥 {bot.me.mention} Berhasil Di Aktifkan
 ➡️ Akun: <a href=tg://openmessage?user_id={nokos_client.me.id}>{nokos_client.me.first_name} {nokos_client.me.last_name or ''}</a>
-➡️ ID: <code>{nokos_client.me.id}</code>
+➡️ ID: <code>{nokos_client.me.id}</code>
+
 </b></blockquote>"""
         await bot_msg.edit(text_done)
         return await client.send_message(
