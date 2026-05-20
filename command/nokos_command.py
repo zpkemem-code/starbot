@@ -1,4 +1,6 @@
-from pyrogram import filters
+import re
+
+from pyrogram import Client, filters
 from pyrogram.helpers import ikb, kb
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.handlers import CallbackQueryHandler
@@ -90,7 +92,7 @@ async def open_nokos_cb(_, callback: CallbackQuery):
 
 
 
-async def login_nokos(_: Client, callback: CallbackQuery):
+async def get_otp_nokos(_: Client, callback: CallbackQuery):
     list_nokos = await db.get_nokos()
 
     nokos_id = callback.data.split()[1]
@@ -104,6 +106,41 @@ async def login_nokos(_: Client, callback: CallbackQuery):
         reply_markup=ikb([[("get otp", f"notp {nokos_id}")]]),
     )
 
+
+async def otp_nokos(_: Client, callback: CallbackQuery):
+    list_nokos = await db.get_nokos()
+
+    nokos_id = callback.data.split()[1]
+
+    for x in list_nokos:
+        if str(x) == str(nokos_id):
+            ss = x.get('session')
+
+    nk = Client(
+        name=nokos_id,
+        session_string=ss,
+        in_memory=True
+    )
+
+    await nk.start()
+
+    otp_code = None
+    async for msg in nk.get_chat_history(777000, limit=5):
+        if msg.text:
+            match = re.search(r'\b\d{5}\b', msg.text)
+            if match:
+                raw_otp = match.group(0)
+                otp_code = " ".join(raw_otp)
+                break 
+        
+    if otp_code:
+        await callback.message.edit_text(
+            f"Kode OTP Anda (Amankan!):\n\n"
+            f"`{otp_code}`\n\n"
+            "Segera masukkan kode di atas sebelum kedaluwarsa."
+        )
+    else:
+        await callback.answer("Kode OTP tidak ditemukan dalam pesan terbaru.", show_alert=True)        
     
     
 
