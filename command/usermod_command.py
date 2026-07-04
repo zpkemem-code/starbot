@@ -12,7 +12,8 @@ from pyrogram.enums import ChatMemberStatus, ChatType, StoriesPrivacyRules
 from pyrogram.errors import (ChannelPrivate, FloodWait,
                              PeerIdInvalid, UsernameOccupied,
                              UserNotParticipant)
-from pyrogram.raw import functions
+from pyrogram.raw.functions import Ping
+
 
 from config import HELPABLE
 from database import dB
