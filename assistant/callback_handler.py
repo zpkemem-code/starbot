@@ -76,12 +76,12 @@ async def _(client, message):
 
         elif text == "Support":
             return await message.reply(
-                "Support:\nhttps://t.me/StarHereAlone"
+                "Support:\nhttps://t.me/zpsexz"
             )
 
         elif text == "Development":
             return await message.reply(
-                "Development:\nhttps://t.me/TuhanT3l3"
+                "Development:\nhttps://t.me/959792624119"
             )
         elif text in ["↩️ Beranda", "🏠 Beranda"]:
             buttons = ButtonUtils.start_com_button()
