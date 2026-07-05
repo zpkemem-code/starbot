@@ -124,7 +124,7 @@ HELP_LOGO = os.environ.get(
     "https://files.catbox.moe/ru9lxz.jpg",
 )
 
-BLACKLIST_GCAST =-1003996218782
+BLACKLIST_GCAST =["-1003996218782"]
 
 COOKIE_BING = os.environ.get(
     "COOKIE_BING",
