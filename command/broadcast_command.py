@@ -61,7 +61,9 @@ async def bc_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}Broadcast cancelled.")
-            if str(-1003996218782) in blacklist or str(-1003996218782) in BLACKLIST_GCAST or str(-1003996218782) in DEVS:
+            # Ganti baris 64 menjadi seperti ini:
+if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
+
                 continue
             try:
                 await (
@@ -194,7 +196,9 @@ async def gcast_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}{message.command[0]} cancelled.")
-            if str(-1003996218782) in blacklist or str(-1003996218782) in BLACKLIST_GCAST or str(-1003996218782) in DEVS:
+            # Ganti baris 64 menjadi seperti ini:
+if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
+
                 continue
             try:
                 await (
@@ -326,7 +330,9 @@ async def ucast_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}{message.command[0]} cancelled.")
-            if str(-1003996218782) in blacklist or str(-1003996218782) in BLACKLIST_GCAST or str(-1003996218782) in DEVS:
+            # Ganti baris 64 menjadi seperti ini:
+if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
+
                 continue
             try:
                 await (
@@ -471,7 +477,9 @@ async def broadcast_db(
         for chat_id in chatsdb:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}**Broadcast cancelled.**")
-            if str(-1003996218782) in blacklist or str(-1003996218782) in BLACKLIST_GCAST or str(-1003996218782) in DEVS:
+            # Ganti baris 64 menjadi seperti ini:
+if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
+
                 continue
             try:
                 await (
