@@ -61,9 +61,7 @@ async def bc_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}Broadcast cancelled.")
-            # Ganti baris 64 menjadi seperti ini:
-if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
-
+            if chat_id in blacklist or chat_id in BLACKLIST_GCAST or chat_id in DEVS:
                 continue
             try:
                 await (
@@ -196,9 +194,7 @@ async def gcast_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}{message.command[0]} cancelled.")
-            # Ganti baris 64 menjadi seperti ini:
-if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
-
+            if chat_id in blacklist or chat_id in BLACKLIST_GCAST or chat_id in DEVS:
                 continue
             try:
                 await (
@@ -330,9 +326,7 @@ async def ucast_cmd(client, message):
         for chat_id in chats:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}{message.command[0]} cancelled.")
-            # Ganti baris 64 menjadi seperti ini:
-if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
-
+            if chat_id in blacklist or chat_id in BLACKLIST_GCAST or chat_id in DEVS:
                 continue
             try:
                 await (
@@ -477,9 +471,7 @@ async def broadcast_db(
         for chat_id in chatsdb:
             if not task.is_active(task_id):
                 return await proses.edit(f"{em.gagal}**Broadcast cancelled.**")
-            # Ganti baris 64 menjadi seperti ini:
-if str(-1003996218782) in (blacklist or []) or str(-1003996218782) in (BLACKLIST_GCAST or []) or str(-1003996218782) in (DEVS or []):
-
+            if chat_id in blacklist or chat_id in BLACKLIST_GCAST or chat_id in DEVS:
                 continue
             try:
                 await (
