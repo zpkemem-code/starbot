@@ -19,7 +19,7 @@ from helpers import Bing, ButtonUtils, Emoji, Tools, animate_proses, drakor
 MAX_MEDIA_PER_BATCH = 7
 
 
-MAX_CAPTION_LENGTH = 700
+MAX_CAPTION_LENGTH = 4000
 
 RANDOM_PANTUN = [
     "Percintaan",
