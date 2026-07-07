@@ -64,7 +64,7 @@ async def add_prem_user(client, message):
     if cmd_plan == "pro":
         user_plan = "is_pro"
     elif cmd_plan == "addprem":
-        if not STARX:
+        if not IS_JASA_PRIVATE:
             return await message.reply("<b>This command only for Ubot Private</b>")
         user_plan = "is_pro"
     else:
