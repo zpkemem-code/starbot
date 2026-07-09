@@ -77,7 +77,7 @@ class StreamingTools:
         }
 
         if media_type == "Video":
-            stream_kwargs["video_parameters"] = VideoQuality.HD_720p
+            stream_kwargs["video_parameters"] = VideoQuality.HD_360p
         else:
             stream_kwargs["video_flags"] = MediaStream.Flags.IGNORE
 
