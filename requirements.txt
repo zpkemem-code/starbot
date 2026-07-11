@@ -72,4 +72,5 @@ git+https://github.com/zpkemem-code/callgram.git@master
 ###git+https://github.com/jonesroot/callgram.git@master
 git+https://github.com/google-gemini/generative-ai-python.git@main
 git+https://github.com/FerlyKurniawan/pyrofork
-git+https://github.com/FerlyKurniawan/hydrogram@dev
+###git+https://github.com/FerlyKurniawan/hydrogram@dev
+git+https://github.com/levinedam/hydrogram@main
