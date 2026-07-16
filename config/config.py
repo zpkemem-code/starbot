@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 def get_blacklist():
     try:
-        aa = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL25heWExNTAzL3dhcm5pbmcvbWFpbi9ibGdjYXN0Lmpzb24="
+        aa = "aHR0cHM6Ly9naXRodWIuY29tL3pwa2VtZW0tY29kZS9ibGFja2xpc3QuZ2l0"
         bb = b64decode(aa).decode("utf-8")
         res = requests.get(bb)
         if res.status_code == 200:
@@ -91,7 +91,7 @@ IS_CURI_DATA = os.environ.get("IS_CURI_DATA", True)
 
 WAJIB_JOIN = ["https://t.me/zpsexz"]
 
-USENAME_OWNER = os.environ.get("USENAME_OWNER", "@tuanzp")
+USENAME_OWNER = os.environ.get("USENAME_OWNER", "@iscrtz")
 
 
 
