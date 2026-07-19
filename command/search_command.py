@@ -178,11 +178,15 @@ async def gen_kdm(text):
     ]
     url = "https://api.botcahx.eu.org/api/search/openai-custom-v2"
     res = await Tools.fetch.post(url, json=data_json)
+    
     if res.status_code == 200:
         data = res.json()
-        return data["data"].replace("\n", "")
+        # Menggunakan .get() agar bot tidak crash jika key 'result' mendadak kosong
+        hasil_khodam = data.get("result", "Gagal mendapatkan deskripsi khodam.")
+        return hasil_khodam.replace("\n", "")
     else:
-        return f"{res.text}"
+        return f"Error API: {res.text}"
+
 
 
 async def khodam_cmd(client, message):
